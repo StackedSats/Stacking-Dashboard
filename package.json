@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "s": "stx make_keychain -t"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,8 @@
   },
   "homepage": "https://github.com/StackedSats/Staking-Dashboard#readme",
   "dependencies": {
+    "@stacks/blockchain-api-client": "^0.36.0",
+    "@stacks/cli": "^1.0.0-beta.20",
     "@stacks/network": "^1.0.0-beta.20",
     "@stacks/stacking": "^1.0.0-beta.20",
     "@stacks/transactions": "^1.0.0-beta.20",

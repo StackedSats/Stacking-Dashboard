@@ -1,3 +1,14 @@
+const { TransactionsApi } = require('@stacks/blockchain-api-client');
+
+const apiConfig = new Configuration({
+  fetchApi: fetch,
+  basePath: 'https://stacks-node-api.blockstack.org', // defaults to http://localhost:3999
+});
+
+const tx = new TransactionsApi(apiConfig);
+
+let txid="";
+
 async function getCoreInfo() {
   const coreInfo = await client.getCoreInfo();
   return coreInfo;
@@ -46,7 +57,27 @@ export function lockStxToStack() {
       } else {
         console.log(`txid: ${response}`);
         // txid: f6e9dbf6a26c1b73a14738606cb2232375d1b440246e6bbc14a45b3a66618481
+        txid = response
         return response;
       }
     });
+}
+
+export default async function waitTransaction () {  
+  const waitForTransactionSuccess = txId =>
+  new Promise((resolve, reject) => {
+    const pollingInterval = 3000;
+    const intervalID = setInterval(async () => {
+      const resp = await tx.getTransactionById({ txId });
+      if (resp.tx_status === 'success') {
+        // stop polling
+        clearInterval(intervalID);
+        // update UI to display stacking status
+        return resolve(resp);
+      }
+    }, pollingInterval);
+  });
+  
+  // note: txId should be defined previously
+const resp = await waitForTransactionSuccess(txId);
 }

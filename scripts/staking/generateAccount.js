@@ -8,16 +8,11 @@ import {
 import { StackingClient } from "@stacks/stacking";
 
 import { StacksTestnet } from "@stacks/network";
+import config from "../../config.js";
 
 import BN from "bn.js";
 
-const privateKey = privateKeyToString(makeRandomPrivKey());
-
-const stxAddress = getAddressFromPrivateKey(
-  privateKey,
-  TransactionVersion.Testnet
-);
-
+const stxAddress = config.keyInfo.address;
 const client = new StackingClient(stxAddress, new StacksTestnet());
 // console.log(client);
 

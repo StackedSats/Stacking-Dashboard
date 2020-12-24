@@ -1,4 +1,5 @@
 import client from "./generateAccount.js";
+import config from "../../config.js";
 import { secondsUntilNextCycle, cycleDuration } from "./displayStaking.js";
 
 export async function isUserEligible() {
@@ -18,7 +19,7 @@ export async function numberOfCycles() {
 
 export async function stackingEligibility() {
   // user supplied parameters
-  let btcAddress = "1Xik14zRm29UsyS6DjhYg4iZeZqsDa8D3";
+  let btcAddress = config.keyInfo.btcAddress;
   let numberOfCycles = 3;
 
   const stackingEligibility = await client.canStack({
@@ -31,6 +32,11 @@ export async function stackingEligibility() {
   // this assumes user is stacking is entire balance
 }
 
-// isUserEligible();
-numberOfCycles();
+export async function getStatus() {
+  const status = await client.getStatus();
+  console.log(status);
+}
+isUserEligible();
+// numberOfCycles();
 // stackingEligibility();
+getStatus();
