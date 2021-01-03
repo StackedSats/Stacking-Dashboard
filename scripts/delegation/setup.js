@@ -1,5 +1,9 @@
-import { SmartContractsApi } from "@stacks/blockchain-api-client";
+import { InfoApi } from "@stacks/blockchain-api-client";
 
-const Contract = new SmartContractsApi();
-export default Contract
-console.log(Contract);
+(async function abc() {
+  const infoApi = new InfoApi();
+  const [contractAddress, contractName] = (
+    await infoApi.getPoxInfo()
+  ).contract_id.split(".");
+  console.log(contractAddress, contractName);
+})();
