@@ -47,22 +47,22 @@ function Cards() {
       <Card className="mb-8 shadow-md">
         <CardBody>
           <TabGroup numTabs={3} direction={TabGroup.direction.HORIZONTAL}>
-            <div className="flex items-center justify-between text-gray-400 dark:text-white">
+            <div className="flex items-center justify-between text-white">
               <div className="flex items-center">
                 <TabGroup.TabList>
                   <TabGroup.Tab
                     index={0}
                     className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
-                    activeClassName="text-primary-500 dark:text-white"
-                    inactiveClassName="text-gray-400 dark:text-gray-300"
+                    activeClassName="text-primary-500 text-white"
+                    inactiveClassName="text-gray-400 text-gray-300"
                   >
                     Tab 1
                   </TabGroup.Tab>
                   <TabGroup.Tab
                     index={1}
                     className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
-                    activeClassName="text-primary-500 dark:text-white"
-                    inactiveClassName="text-gray-400 dark:text-gray-300"
+                    activeClassName="text-primary-500 text-white"
+                    inactiveClassName="text-gray-400 text-gray-300"
                   >
                     Tab 2
                   </TabGroup.Tab>
@@ -70,14 +70,14 @@ function Cards() {
                 <div className="ml-10 text-primary-500">Export</div>
               </div>
               <div>
-                <Select className="mt-1">
+                <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                   <option>Sort By</option>
                 </Select>
               </div>
             </div>
             <TabGroup.TabPanel
               index={0}
-              className="py-10 text-gray-500 transition-all transform dark:text-gray-200"
+              className="py-10 text-gray-200 transition-all transform"
               activeClassName="opacity-100 duration-500 translate-x-0"
               inactiveClassName="absolute opacity-0 -translate-x-2"
             >
@@ -106,7 +106,7 @@ function Cards() {
             </TabGroup.TabPanel>
             <TabGroup.TabPanel
               index={1}
-              className="flex flex-col py-10 text-gray-500 transition-all transform dark:text-gray-200"
+              className="flex flex-col py-10 text-gray-200 transition-all transform"
               activeClassName="opacity-100 duration-500 translate-x-0"
               inactiveClassName="absolute opacity-0 -translate-x-2"
             >
@@ -132,8 +132,8 @@ function Cards() {
         <InfoCard title="Total clients" value="6389">
           <RoundIcon
             icon={PeopleIcon}
-            iconColorClass="text-orange-500 dark:text-orange-100"
-            bgColorClass="bg-orange-100 dark:bg-orange-500"
+            iconColorClass="text-orange-100"
+            bgColorClass="bg-orange-500"
             className="mr-4"
           />
         </InfoCard>
@@ -141,8 +141,8 @@ function Cards() {
         <InfoCard title="Account balance" value="$ 46,760.89">
           <RoundIcon
             icon={MoneyIcon}
-            iconColorClass="text-green-500 dark:text-green-100"
-            bgColorClass="bg-green-100 dark:bg-green-500"
+            iconColorClass="text-green-100"
+            bgColorClass="bg-green-500"
             className="mr-4"
           />
         </InfoCard>
@@ -150,8 +150,8 @@ function Cards() {
         <InfoCard title="New sales" value="376">
           <RoundIcon
             icon={CartIcon}
-            iconColorClass="text-blue-500 dark:text-blue-100"
-            bgColorClass="bg-blue-100 dark:bg-blue-500"
+            iconColorClass="text-blue-100"
+            bgColorClass="bg-blue-500"
             className="mr-4"
           />
         </InfoCard>
@@ -159,8 +159,8 @@ function Cards() {
         <InfoCard title="Pending contacts" value="35">
           <RoundIcon
             icon={ChatIcon}
-            iconColorClass="text-teal-500 dark:text-teal-100"
-            bgColorClass="bg-teal-100 dark:bg-teal-500"
+            iconColorClass="text-teal-100"
+            bgColorClass="bg-teal-500"
             className="mr-4"
           />
         </InfoCard>
@@ -171,10 +171,8 @@ function Cards() {
       <div className="grid gap-6 mb-8 md:grid-cols-2">
         <Card>
           <CardBody>
-            <p className="mb-4 font-semibold text-gray-600 dark:text-gray-300">
-              Revenue
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="mb-4 font-semibold text-gray-300">Revenue</p>
+            <p className="text-gray-400">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga,
               cum commodi a omnis numquam quod? Totam exercitationem quos hic
               ipsam at qui cum numquam, sed amet ratione! Ratione, nihil

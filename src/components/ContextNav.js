@@ -11,7 +11,7 @@ function ContextNav({ menuItems, buttonIcon }) {
       <button onClick={handleContextClick}>{buttonIcon}</button>
 
       <Dropdown
-        className="z-50 w-32 dark:bg-gray-700"
+        className="z-50 w-32 bg-gray-700"
         isOpen={isContextMenuOpen}
         onClose={() => setIsContextMenuOpen(false)}
       >

@@ -99,7 +99,7 @@ const Process1 = (props) => {
       <ModalBody>
         <TableContainer className="mb-8 bg-white">
           <Table>
-            <TableHeader className="border-b dark:border-gray-100">
+            <TableHeader className="border-b border-gray-100">
               <tr>
                 <TableCell className="bg-gray-50">Network</TableCell>
                 <TableCell className="bg-gray-50">APY</TableCell>
@@ -107,8 +107,8 @@ const Process1 = (props) => {
                 <TableCell className="bg-gray-50"></TableCell>
               </tr>
             </TableHeader>
-            <TableBody className="text-lg dark:divide-gray-100">
-              <TableRow className="bg-white dark:border-white">
+            <TableBody className="text-lg divide-gray-100">
+              <TableRow className="bg-white border-white">
                 <TableCell>
                   <div className="flex items-center">
                     <MainNet /> <div className="ml-4">Stacks TestNet</div>
@@ -120,7 +120,7 @@ const Process1 = (props) => {
                   <TestNetButton step={1} {...props} />
                 </TableCell>
               </TableRow>
-              <TableRow className="bg-white dark:border-white">
+              <TableRow className="bg-white border-white">
                 <TableCell>
                   <div className="flex items-center">
                     <MainNet /> <div className="ml-4">Stacks Mainnet</div>

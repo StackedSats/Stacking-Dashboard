@@ -147,7 +147,7 @@ function MyPortfolio() {
                   <div className="xl:-mb-8">
                     <div className="flex justify-end mb-4">
                       <div>
-                        <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
+                        <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                           <option>Daily</option>
                         </Select>
                       </div>
@@ -189,7 +189,7 @@ function MyPortfolio() {
                         <TableCell>Explorer</TableCell>
                       </tr>
                     </TableHeader>
-                    <TableBody className="text-lg dark:divide-gray-500">
+                    <TableBody className="text-lg divide-gray-500">
                       <TableRow>
                         <TableCell>
                           <div className="text-lg text-white">17 Dec 2020</div>
@@ -451,7 +451,7 @@ function MyPortfolio() {
                   <h2 className="mr-3 text-2xl font-medium">Total balance</h2>
                 </div>
                 <div>
-                  <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
+                  <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                     <option>USD</option>
                   </Select>
                 </div>
@@ -487,7 +487,7 @@ function MyPortfolio() {
               <div>
                 <div className="flex justify-end mb-4">
                   <div>
-                    <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
+                    <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                       <option>Daily</option>
                     </Select>
                   </div>
@@ -534,7 +534,7 @@ function MyPortfolio() {
                 <div className="-mb-8">
                   <div className="flex justify-end mb-4">
                     <div>
-                      <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
+                      <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                         <option>Daily</option>
                       </Select>
                     </div>
@@ -551,7 +551,7 @@ function MyPortfolio() {
                   <h2 className="mr-3 text-2xl font-medium">STX balance</h2>
                 </div>
                 <div>
-                  <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
+                  <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                     <option>USD</option>
                   </Select>
                 </div>
@@ -587,7 +587,7 @@ function MyPortfolio() {
               <div>
                 <div className="flex justify-end mb-4">
                   <div>
-                    <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
+                    <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                       <option>Staked</option>
                     </Select>
                   </div>
@@ -624,7 +624,7 @@ function MyPortfolio() {
                 <div className="-mb-8">
                   <div className="flex justify-end mb-4">
                     <div>
-                      <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
+                      <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                         <option>Daily</option>
                       </Select>
                     </div>

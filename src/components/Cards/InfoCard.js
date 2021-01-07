@@ -3,14 +3,12 @@ import { Card, CardBody } from "@windmill/react-ui";
 
 function InfoCard({ title, value, children: icon }) {
   return (
-    <Card>
+    <Card colored className="bg-gray-500">
       <CardBody className="flex items-center">
         {icon}
         <div>
-          <p className="font-medium text-gray-600 dark:text-white">{title}</p>
-          <p className="text-2xl font-medium text-gray-700 opacity-75 dark:text-white">
-            {value}
-          </p>
+          <p className="font-medium text-white">{title}</p>
+          <p className="text-2xl font-medium text-white opacity-75">{value}</p>
         </div>
       </CardBody>
     </Card>

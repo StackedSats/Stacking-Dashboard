@@ -65,7 +65,7 @@ function Blank() {
                       <TableCell>Volume</TableCell>
                     </tr>
                   </TableHeader>
-                  <TableBody className="text-lg dark:divide-gray-500">
+                  <TableBody className="text-lg divide-gray-500">
                     <TableRow className="text-white">
                       <TableCell>Dec 20, 2020</TableCell>
                       <TableCell>45,876,958</TableCell>
@@ -134,36 +134,36 @@ function Blank() {
           <Card className="mb-8 shadow-md">
             <CardBody className="text-white">
               <TabGroup numTabs={3} direction={TabGroup.direction.HORIZONTAL}>
-                <div className="flex items-center justify-between text-gray-400 dark:text-white">
+                <div className="flex items-center justify-between text-white">
                   <div className="flex items-center">
                     <TabGroup.TabList>
                       <TabGroup.Tab
                         index={0}
                         className="px-4 py-2 mr-3 text-xl transition-colors duration-150"
-                        activeClassName="text-primary-500 dark:text-white"
-                        inactiveClassName="text-gray-400 dark:text-gray-300"
+                        activeClassName="text-primary-500 text-white"
+                        inactiveClassName="text-gray-400 text-gray-300"
                       >
                         Largest Wallet
                       </TabGroup.Tab>
                       <TabGroup.Tab
                         index={1}
                         className="px-4 py-2 mr-3 text-xl transition-colors duration-150"
-                        activeClassName="text-primary-500 dark:text-white"
-                        inactiveClassName="text-gray-400 dark:text-gray-300"
+                        activeClassName="text-primary-500 text-white"
+                        inactiveClassName="text-gray-400 text-gray-300"
                       >
                         Exchange Wallet
                       </TabGroup.Tab>
                     </TabGroup.TabList>
                   </div>
                   <div>
-                    <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
+                    <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                       <option>Sort By</option>
                     </Select>
                   </div>
                 </div>
                 <TabGroup.TabPanel
                   index={0}
-                  className="py-6 text-gray-500 transition-all transform dark:text-gray-200"
+                  className="py-6 text-gray-200 transition-all transform"
                   activeClassName="opacity-100 duration-500 translate-x-0"
                   inactiveClassName="absolute opacity-0 -translate-x-2"
                 >
@@ -176,7 +176,7 @@ function Blank() {
                           <TableCell>Balance</TableCell>
                         </tr>
                       </TableHeader>
-                      <TableBody className="text-lg dark:divide-gray-500">
+                      <TableBody className="text-lg divide-gray-500">
                         <TableRow className="text-white">
                           <TableCell>1</TableCell>
                           <TableCell>Binance</TableCell>
@@ -222,7 +222,7 @@ function Blank() {
                 </TabGroup.TabPanel>
                 <TabGroup.TabPanel
                   index={1}
-                  className="flex flex-col py-10 text-gray-500 transition-all transform dark:text-gray-200"
+                  className="flex flex-col py-10 text-gray-200 transition-all transform"
                   activeClassName="opacity-100 duration-500 translate-x-0"
                   inactiveClassName="absolute opacity-0 -translate-x-2"
                 >

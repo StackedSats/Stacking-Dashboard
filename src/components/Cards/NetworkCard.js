@@ -7,9 +7,7 @@ function NetworkCard({ title, children: icon }) {
     <Card className="text-white border border-gray-900 cursor-pointer hover:border-primary-500 hover:text-primary-500">
       <CardBody className="flex items-center">
         {icon}
-        <p className="mr-4 text-lg font-medium text-gray-600 dark:text-white">
-          {title}
-        </p>
+        <p className="mr-4 text-lg font-medium text-white">{title}</p>
         <VscArrowSmallRight className="mt-1 wh-10"></VscArrowSmallRight>
       </CardBody>
     </Card>

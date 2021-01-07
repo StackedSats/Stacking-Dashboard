@@ -51,7 +51,7 @@ function Blank() {
                     </div>
                   </div>
                   <div>
-                    <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
+                    <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                       <option>Sort By</option>
                     </Select>
                   </div>
@@ -66,7 +66,7 @@ function Blank() {
                         <TableCell>Time</TableCell>
                       </tr>
                     </TableHeader>
-                    <TableBody className="text-lg dark:divide-gray-500">
+                    <TableBody className="text-lg divide-gray-500">
                       <TableRow className="text-white">
                         <TableCell>foo</TableCell>
                         <TableCell>
@@ -153,7 +153,7 @@ function Blank() {
                     <h2 className="mr-3 text-xl font-medium">Function Calls</h2>
                   </div>
                   <div>
-                    <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
+                    <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                       <option>24 Hrs</option>
                     </Select>
                   </div>

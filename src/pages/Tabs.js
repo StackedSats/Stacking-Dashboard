@@ -9,21 +9,21 @@ function Cards() {
       <PageTitle>Tabs</PageTitle>
 
       <TabGroup numTabs={3} direction={TabGroup.direction.HORIZONTAL}>
-        <div className="flex items-center justify-between text-gray-400 dark:text-white">
+        <div className="flex items-center justify-between text-white">
           <TabGroup.TabList>
             <TabGroup.Tab
               index={0}
               className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
-              activeClassName="text-primary-500 dark:text-white"
-              inactiveClassName="text-gray-400 dark:text-gray-300"
+              activeClassName="text-primary-500 text-white"
+              inactiveClassName="text-gray-400 text-gray-300"
             >
               Tab 1
             </TabGroup.Tab>
             <TabGroup.Tab
               index={1}
               className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
-              activeClassName="text-primary-500 dark:text-white"
-              inactiveClassName="text-gray-400 dark:text-gray-300"
+              activeClassName="text-primary-500 text-white"
+              inactiveClassName="text-gray-400 text-gray-300"
             >
               Tab 2
             </TabGroup.Tab>
@@ -33,7 +33,7 @@ function Cards() {
         </div>
         <TabGroup.TabPanel
           index={0}
-          className="py-10 text-gray-500 transition-all transform dark:text-gray-200"
+          className="py-10 text-gray-500 transition-all transform"
           activeClassName="opacity-100 duration-500 translate-x-0"
           inactiveClassName="absolute opacity-0 -translate-x-2"
         >
@@ -41,7 +41,7 @@ function Cards() {
         </TabGroup.TabPanel>
         <TabGroup.TabPanel
           index={1}
-          className="flex flex-col py-10 text-gray-500 transition-all transform dark:text-gray-200"
+          className="flex flex-col py-10 text-gray-500 transition-all transform"
           activeClassName="opacity-100 duration-500 translate-x-0"
           inactiveClassName="absolute opacity-0 -translate-x-2"
         >

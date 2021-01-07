@@ -60,6 +60,11 @@ const routes = [
         name: "Buttons",
       },
       {
+        path: "/app/forms",
+        icon: "IconPlaceholder",
+        name: "Forms",
+      },
+      {
         path: "/app/badges",
         icon: "IconPlaceholder",
         name: "Badges",

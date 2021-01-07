@@ -23,7 +23,6 @@ const hasAvatar = false;
 /*                              Header Component                              */
 /* -------------------------------------------------------------------------- */
 function Header() {
-  // const { mode, toggleMode } = useContext(WindmillContext);
   const { toggleSidebar } = useContext(SidebarContext);
 
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -33,8 +32,8 @@ function Header() {
   }
 
   return (
-    <header className="z-40 h-16 bg-white shadow-bottom dark:bg-primary-500">
-      <div className="flex items-center justify-between h-full px-6 mx-auto text-primary-600 dark:text-primary-300">
+    <header className="z-40 h-16 shadow-bottom bg-primary-500">
+      <div className="flex items-center justify-between h-full px-6 mx-auto text-primary-300">
         {/* <!-- Mobile hamburger --> */}
         <button
           className="p-1 mr-5 -ml-1 rounded-md lg:hidden focus:outline-none focus:shadow-outline-purple"
@@ -51,7 +50,7 @@ function Header() {
               <SearchIcon className="w-4 h-4" aria-hidden="true" />
             </div>
             <Input
-              className="pl-8 text-gray-500 placeholder-white outline-none dark:border-blue-700 dark:bg-blue-700"
+              className="pl-8 text-gray-500 placeholder-white bg-blue-700 border-blue-700 outline-none"
               placeholder="Search by name, hash or number"
               aria-label="Search"
             />
@@ -60,21 +59,6 @@ function Header() {
 
         {/* <!-- Tools --> */}
         <div className="flex items-center flex-shrink-0 space-x-6">
-          {/* <!-- Theme toggler --> 
-          <div className="flex">
-            <button
-              className="rounded-md focus:outline-none focus:shadow-outline-purple"
-              onClick={toggleMode}
-              aria-label="Toggle color mode"
-            >
-              {mode === "dark" ? (
-                <SunIcon className="w-5 h-5" aria-hidden="true" />
-              ) : (
-                <MoonIcon className="w-5 h-5" aria-hidden="true" />
-              )}
-            </button>
-          </div>*/}
-
           {/* <!-- Profile menu --> */}
           <div className="relative">
             <button

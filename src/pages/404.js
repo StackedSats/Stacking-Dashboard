@@ -14,13 +14,11 @@ function Page404() {
           className="mx-auto mt-8 text-white wh-32"
           aria-hidden="true"
         />
-        <h1 className="text-6xl font-semibold text-gray-700 dark:text-white">
-          404
-        </h1>
-        <p className="text-gray-700 dark:text-white">
+        <h1 className="text-6xl font-semibold text-white">404</h1>
+        <p className="text-white">
           Oops! Page not found! <br />
           <Link
-            className="block mt-4 hover:underline dark:text-primary-400"
+            className="block mt-4 hover:underline text-primary-400"
             to="/app/my-portfolio"
           >
             Go to dashboard

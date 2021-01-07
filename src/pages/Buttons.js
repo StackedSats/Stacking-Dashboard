@@ -108,7 +108,7 @@ function Buttons() {
 
       <SectionTitle>Link</SectionTitle>
       <div className="flex flex-col flex-wrap mb-8 space-y-4 md:flex-row md:items-end md:space-x-4">
-        <a href="/" className="btn btn-link dark:text-white">
+        <a href="/" className="text-white btn btn-link">
           Regular
         </a>
       </div>

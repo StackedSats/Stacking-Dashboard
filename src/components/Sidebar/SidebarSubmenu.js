@@ -5,7 +5,7 @@ import * as Icons from "../../icons";
 import { Transition } from "@windmill/react-ui";
 
 const buttonClasses =
-  "inline-flex focus:outline-none items-center px-6 py-3 w-full text-sm font-medium text-gray-300 transition-colors duration-150 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-100 justify-between";
+  "inline-flex focus:outline-none items-center px-6 py-3 w-full text-sm font-medium text-gray-300 transition-colors duration-150 text-gray-200 hover:text-gray-100 justify-between";
 
 function Icon({ icon, ...props }) {
   const Icon = Icons[icon];
@@ -47,12 +47,12 @@ function SidebarSubmenu({ route }) {
         leaveTo="opacity-0 max-h-0"
       >
         <ul
-          className="p-2 space-y-6 overflow-hidden text-sm text-gray-300 dark:text-gray-200 dark:bg-gray-800"
+          className="p-2 space-y-6 overflow-hidden text-sm text-gray-200 bg-gray-800"
           aria-label="submenu"
         >
           {route.routes.map((r) => (
             <li
-              className="px-2 pl-4 font-medium transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-100"
+              className="px-2 pl-4 font-medium transition-colors duration-150 hover:text-gray-100"
               key={r.name}
             >
               <Link className="flex w-full" to={r.path}>

@@ -1,31 +1,12 @@
 export default {
-  // Alert
-  alert: {
-    base: "p-4 pl-12 relative rounded leading-5",
-    withClose: "pr-12",
-    success: "bg-green-50 text-green-900 dark:bg-green-600 dark:text-white",
-    danger: "bg-red-50 text-red-900 dark:bg-red-600 dark:text-white",
-    warning: "bg-yellow-50 text-yellow-900 dark:bg-yellow-600 dark:text-white",
-    neutral: "bg-gray-50 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
-    info: "bg-blue-50 text-blue-900 dark:bg-blue-600 dark:text-white",
-    icon: {
-      base: "h-5 w-5",
-      success: "text-green-400 dark:text-green-300",
-      danger: "text-red-400 dark:text-red-300",
-      warning: "text-yellow-400 dark:text-yellow-100",
-      neutral: "text-gray-400 dark:text-gray-500",
-      info: "text-blue-400 dark:text-blue-300",
-    },
-  },
   // Pagination
   pagination: {
-    base:
-      "flex flex-col justify-between text-xs sm:flex-row text-gray-600 dark:text-gray-400",
+    base: "flex flex-col justify-between text-xs sm:flex-row text-gray-400",
   },
   // TableFooter
   tableFooter: {
     base:
-      "px-4 py-3 border-t dark:border-gray-700 bg-gray-50 text-gray-500 dark:text-gray-400 dark:bg-gray-800",
+      "px-4 py-3 border-t border-gray-700 bg-gray-50 text-gray-400 bg-gray-800",
   },
   // TableRow
   tableRow: {
@@ -33,8 +14,7 @@ export default {
   },
   // TableHeader
   tableHeader: {
-    base:
-      "tracking-wide text-left text-gray-500 bg-gray-50 dark:text-gray-200 dark:bg-gray-700",
+    base: "tracking-wide text-left text-gray-200 bg-gray-700",
   },
   // TableContainer
   tableContainer: {
@@ -46,8 +26,7 @@ export default {
   },
   // TableBody
   tableBody: {
-    base:
-      "bg-white divide-y dark:divide-white-700 dark:bg-gray-800 text-gray-700 dark:text-gray-300",
+    base: "divide-y divide-white-700 bg-gray-800 text-gray-300",
   },
   // DropdownItem
   // this is the <li> that lives inside the Dropdown <ul>
@@ -58,7 +37,7 @@ export default {
   // Dropdown
   dropdown: {
     base:
-      "absolute max-w-xs p-2 mt-2 text-gray-600 bg-white border border-gray-100 rounded shadow-md min-w-max-content dark:text-gray-300 dark:border-gray-700 dark:bg-white",
+      "absolute max-w-xs p-2 mt-2 text-gray-600 bg-white border border-gray-100 rounded shadow-md min-w-max-content",
     align: {
       left: "left-0",
       right: "right-0",
@@ -94,14 +73,11 @@ export default {
   // Badge
   badge: {
     base: "inline-flex px-6 py-2 text-xs font-medium leading-5 rounded",
-    success:
-      "text-success-700 bg-success-100 dark:bg-success-700 dark:text-success-100",
-    danger: "text-error-700 bg-error-100 dark:text-error-100 dark:bg-error-700",
-    warning:
-      "text-warning-700 bg-warning-100 dark:text-white dark:bg-warning-600",
-    neutral: "text-gray-700 bg-gray-100 dark:text-gray-100 dark:bg-gray-700",
-    primary:
-      "text-primary-700 bg-primary-100 dark:text-white dark:bg-primary-600",
+    success: "bg-success-700 text-success-100",
+    danger: "text-error-100 bg-error-700",
+    warning: "text-white bg-warning-600",
+    neutral: "text-gray-100 bg-gray-700",
+    primary: "text-white bg-primary-600",
   },
   // Backdrop
   backdrop: {
@@ -110,8 +86,7 @@ export default {
   },
   // Textarea
   textarea: {
-    base:
-      "block w-full text-sm dark:text-gray-300 form-textarea focus:outline-none",
+    base: "block w-full text-sm text-gray-300 form-textarea focus:outline-none",
     active:
       "focus:border-primary-400 dark:border-gray-600 dark:focus:border-gray-600 dark:bg-gray-700 dark:focus:shadow-outline-gray focus:shadow-outline-primary",
     disabled: "cursor-not-allowed opacity-50 bg-gray-300 dark:bg-gray-800",
@@ -135,7 +110,7 @@ export default {
   },
   // Label
   label: {
-    base: "block text-sm text-gray-700 dark:text-gray-400",
+    base: "block text-sm text-gray-400",
     // check and radio get this same style
     check: "inline-flex items-center",
     disabled: "opacity-50 cursor-not-allowed",
@@ -163,7 +138,7 @@ export default {
   // Card
   card: {
     base: "min-w-0 rounded shadow-xs overflow-hidden p-3",
-    default: "bg-white dark:bg-gray-800",
+    default: "bg-gray-800",
   },
   cardBody: {
     base: "p-4",
@@ -203,17 +178,15 @@ export default {
     },
 
     outline: {
-      base:
-        "text-gray-600 border-gray-300 border dark:text-gray-400 focus:outline-none",
+      base: "border-gray-300 border text-gray-400 focus:outline-none",
       active:
         "active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:shadow-outline-gray",
       disabled: "opacity-50 cursor-not-allowed bg-gray-300",
     },
     link: {
-      base:
-        "text-gray-600 dark:text-gray-400 focus:outline-none border border-transparent",
+      base: "text-gray-400 focus:outline-none border border-transparent",
       active:
-        "active:bg-transparent hover:bg-gray-100 focus:shadow-outline-gray dark:hover:bg-gray-500 dark:hover:text-gray-300 dark:hover:bg-opacity-10",
+        "active:bg-transparent focus:shadow-outline-gray hover:bg-gray-500 hover:text-gray-300 hover:bg-opacity-10",
       disabled: "opacity-50 cursor-not-allowed",
     },
     // this is the button that lives inside the DropdownItem

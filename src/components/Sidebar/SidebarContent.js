@@ -13,9 +13,9 @@ function Icon({ icon, ...props }) {
 
 function SidebarContent() {
   return (
-    <div className="pb-4 text-gray-500 dark:text-gray-400">
+    <div className="pb-4 text-gray-400">
       <a
-        className="flex items-center h-16 pl-6 text-lg font-bold text-gray-800 bg-gray-500 dark:text-gray-200"
+        className="flex items-center h-16 pl-6 text-lg font-bold text-gray-200 bg-gray-500"
         href="/"
       >
         <Icon width="104" aria-hidden="true" icon="Logo" />
@@ -29,8 +29,8 @@ function SidebarContent() {
               <NavLink
                 exact
                 to={route.path}
-                className="inline-flex items-center w-full px-6 py-3 text-sm font-medium text-gray-200 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-100"
-                activeClassName="text-gray-500 dark:text-primary-500 bg-primary-800"
+                className="inline-flex items-center w-full px-6 py-3 text-sm font-medium text-gray-200 transition-colors duration-150 hover:text-gray-100"
+                activeClassName="text-primary-500 bg-primary-800"
               >
                 {route.icon ? (
                   <Icon

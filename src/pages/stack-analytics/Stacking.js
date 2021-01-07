@@ -101,7 +101,7 @@ function Blank() {
                   </div>
                   <TabGroup.TabPanel
                     index={0}
-                    className="py-6 text-gray-500 transition-all transform dark:text-gray-200"
+                    className="py-6 text-gray-200 transition-all transform"
                     activeClassName="opacity-100 duration-500 translate-x-0"
                     inactiveClassName="absolute opacity-0 -translate-x-2"
                   >
@@ -240,7 +240,7 @@ function Blank() {
                   </TabGroup.TabPanel>
                   <TabGroup.TabPanel
                     index={1}
-                    className="flex flex-col py-10 text-gray-500 transition-all transform dark:text-gray-200"
+                    className="flex flex-col py-10 text-gray-200 transition-all transform"
                     activeClassName="opacity-100 duration-500 translate-x-0"
                     inactiveClassName="absolute opacity-0 -translate-x-2"
                   >
@@ -289,7 +289,7 @@ function Blank() {
                     </div>
                     <TabGroup.TabPanel
                       index={0}
-                      className="py-1 text-gray-500 transition-all transform dark:text-gray-200"
+                      className="py-1 text-gray-200 transition-all transform"
                       activeClassName="opacity-100 duration-500 translate-x-0"
                       inactiveClassName="absolute opacity-0 -translate-x-2"
                     >
@@ -417,7 +417,7 @@ function Blank() {
                     </TabGroup.TabPanel>
                     <TabGroup.TabPanel
                       index={1}
-                      className="flex flex-col py-10 text-gray-500 transition-all transform dark:text-gray-200"
+                      className="flex flex-col py-10 text-gray-200 transition-all transform"
                       activeClassName="opacity-100 duration-500 translate-x-0"
                       inactiveClassName="absolute opacity-0 -translate-x-2"
                     >

@@ -57,23 +57,23 @@ function Blank() {
                 <TabGroup.Tab
                   index={0}
                   className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
-                  activeClassName="text-primary-500 dark:text-white"
-                  inactiveClassName="text-gray-400 dark:text-gray-300"
+                  activeClassName="text-white"
+                  inactiveClassName="text-gray-300"
                 >
                   Mining Node
                 </TabGroup.Tab>
                 <TabGroup.Tab
                   index={1}
                   className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
-                  activeClassName="text-primary-500 dark:text-white"
-                  inactiveClassName="text-gray-400 dark:text-gray-300"
+                  activeClassName="text-white"
+                  inactiveClassName="text-gray-300"
                 >
                   Block
                 </TabGroup.Tab>
               </TabGroup.TabList>
               <TabGroup.TabPanel
                 index={0}
-                className="py-10 text-gray-500 transition-all transform dark:text-gray-200"
+                className="py-10 text-gray-200 transition-all transform"
                 activeClassName="opacity-100 duration-500 translate-x-0"
                 inactiveClassName="absolute opacity-0 -translate-x-2"
               >
@@ -128,7 +128,7 @@ function Blank() {
               </TabGroup.TabPanel>
               <TabGroup.TabPanel
                 index={1}
-                className="flex flex-col py-10 text-gray-500 transition-all transform dark:text-gray-200"
+                className="flex flex-col py-10 text-gray-200 transition-all transform"
                 activeClassName="opacity-100 duration-500 translate-x-0"
                 inactiveClassName="absolute opacity-0 -translate-x-2"
               >
@@ -144,23 +144,23 @@ function Blank() {
                 <TabGroup.Tab
                   index={0}
                   className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
-                  activeClassName="text-primary-500 dark:text-white"
-                  inactiveClassName="text-gray-400 dark:text-gray-300"
+                  activeClassName="text-white"
+                  inactiveClassName="text-gray-300"
                 >
                   Mining Node
                 </TabGroup.Tab>
                 <TabGroup.Tab
                   index={1}
                   className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
-                  activeClassName="text-primary-500 dark:text-white"
-                  inactiveClassName="text-gray-400 dark:text-gray-300"
+                  activeClassName="text-white"
+                  inactiveClassName="text-gray-300"
                 >
                   Block
                 </TabGroup.Tab>
               </TabGroup.TabList>
               <TabGroup.TabPanel
                 index={0}
-                className="py-10 text-gray-500 transition-all transform dark:text-gray-200"
+                className="py-10 text-gray-200 transition-all transform"
                 activeClassName="opacity-100 duration-500 translate-x-0"
                 inactiveClassName="absolute opacity-0 -translate-x-2"
               >
@@ -178,7 +178,7 @@ function Blank() {
                         <TableCell>Fee</TableCell>
                       </tr>
                     </TableHeader>
-                    <TableBody className="text-lg dark:divide-gray-500">
+                    <TableBody className="text-lg divide-gray-500">
                       <TableRow className="text-white">
                         <TableCell>
                           <div className="text-lg text-white">Today</div>
@@ -339,7 +339,7 @@ function Blank() {
               </TabGroup.TabPanel>
               <TabGroup.TabPanel
                 index={1}
-                className="flex flex-col py-10 text-gray-500 transition-all transform dark:text-gray-200"
+                className="flex flex-col py-10 text-gray-200 transition-all transform"
                 activeClassName="opacity-100 duration-500 translate-x-0"
                 inactiveClassName="absolute opacity-0 -translate-x-2"
               >
