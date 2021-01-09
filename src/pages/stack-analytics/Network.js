@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useHistory } from "react-router-dom";
 import PageTitle from "../../components/Typography/PageTitle";
 
 import NetworkCard from "../../components/Cards/NetworkCard";
@@ -22,12 +22,13 @@ const Right = () => {
 };
 
 function Blank() {
+  const history = useHistory();
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>
       <div className="p-4 space-y-6">
         <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-          <div onClick={authenticate}>
+          <div onClick={() => authenticate(history)}>
             <NetworkCard title="Total clients">
               <TestNet className="mr-4" />
             </NetworkCard>

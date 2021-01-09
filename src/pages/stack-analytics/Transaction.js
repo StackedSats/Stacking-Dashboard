@@ -1,35 +1,47 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { getPerson } from "../../scripts/auth";
 import PageTitle from "../../components/Typography/PageTitle";
 import { Card, CardBody, Select } from "@windmill/react-ui";
 import { FiDownload, FiCopy } from "react-icons/fi";
 import ts from "../../assets/img/graph-transfer-summary.png";
 import tf from "../../assets/img/graph-transaction-fees.png";
+import axios from "axios";
 
-const Left = () => {
+const Left = ({
+  tx = "0x934893edfe93250acb8f2b51ea64d36e137e23ffb5f114bb7347bb5b098f53d4",
+}) => {
+  const data = getPerson();
+  console.log(tx);
   return (
     <>
       <h1 className="mb-3 text-2xl">Transaction</h1>
       <div className="flex items-center text-gray-200">
-        <span className="mr-2 text-white">
-          KsdfkjkfjsJDFhdaskjhsH56542246.formate.name
-        </span>
+        <span className="mr-2 text-white">{tx}</span>
         <FiCopy />
       </div>
     </>
   );
 };
 
-const Right = () => {
+const Right = ({ values }) => {
+  console.log(values);
   return (
     <>
       <div className="text-gray-300 ">
         <p className="mb-2">Total Volume</p>
         <div>
-          <b className="mr-2 text-3xl font-normal text-white">253,548 STX</b>{" "}
+          <b className="mr-2 text-3xl font-normal text-white">
+            {values.liquidStxSupplyResult} STX
+          </b>{" "}
           <span>
-            <span className="text-yellow-500">3.25</span> BTC |{" "}
-            <span className="text-green-600">245,635</span> USD
+            <span className="text-yellow-500">
+              {(values.stxusd * values.btcusd) / values.liquidStxSupplyResult}
+            </span>{" "}
+            BTC |{" "}
+            <span className="text-green-600">
+              {values.stxusd / values.liquidStxSupplyResult}
+            </span>{" "}
+            USD
           </span>
         </div>
       </div>
@@ -37,10 +49,72 @@ const Right = () => {
   );
 };
 
-function Blank() {
+function Blank({
+  tx_id = "0x934893edfe93250acb8f2b51ea64d36e137e23ffb5f114bb7347bb5b098f53d4",
+}) {
+  const [values, setValues] = useState({
+    tx_id: "0x934893edfe93250acb8f2b51ea64d36e137e23ffb5f114bb7347bb5b098f53d4",
+    tx_type: "token_transfer",
+    fee_rate: "2000",
+    sender_address: "ST11NJTTKGVT6D1HY4NJRVQWMQM7TVAR091EJ8P2Y",
+    sponsored: false,
+    post_condition_mode: "deny",
+    tx_status: "success",
+    block_hash:
+      "0xb30e21326dfe99ecd179223bffbf54778aea3907464af9ff2b0bf83279a3d5cb",
+    block_height: 119,
+    burn_block_time: 1610146472,
+    burn_block_time_iso: "2021-01-08T22:54:32.000Z",
+    canonical: true,
+    tx_index: 1,
+    tx_result: {
+      hex: "0x0703",
+      repr: "(ok true)",
+    },
+    token_transfer: {
+      recipient_address: "ST3HNB2BXW3ZWGFQHNRWJ140G36PWKGTA3EZHCKQR",
+      amount: "95255300000000",
+      memo:
+        "0x00000000000000000000000000000000000000000000000000000000000000000000",
+    },
+    events: [
+      {
+        event_index: 0,
+        event_type: "stx_asset",
+        asset: {
+          asset_event_type: "transfer",
+          sender: "ST11NJTTKGVT6D1HY4NJRVQWMQM7TVAR091EJ8P2Y",
+          recipient: "ST3HNB2BXW3ZWGFQHNRWJ140G36PWKGTA3EZHCKQR",
+          amount: "95255300000000",
+        },
+      },
+    ],
+  });
+
+  const [totalBalance, setTotalBalance] = useState({
+    stxusd: 40068.1243982181,
+    btcusd: 0.49098332415705,
+    btcTxFeeResult: 3.3745078800000003,
+    liquidStxSupplyResult: 41006245332819816,
+    stxTransactionFeeReult: 1,
+  });
+
+  useEffect(() => {
+    axios
+      .get(`https://stacks-node-api.blockstack.org/extended/v1/tx/${tx_id}`)
+      .then((res) => {
+        setValues(res.data);
+        axios.get("http://207.148.25.63:3500/data").then((res) => {
+          setTotalBalance(res.data);
+        });
+      });
+  }, [tx_id]);
   return (
     <>
-      <PageTitle left={<Left />} right={<Right />}></PageTitle>
+      <PageTitle
+        left={<Left />}
+        right={<Right values={totalBalance} />}
+      ></PageTitle>
       <div className="p-4 space-y-6">
         <div className="grid grid-cols-1 mb-8 xl:gap-6 xl:grid-cols-3">
           <div class="col-span-2">
@@ -68,11 +142,13 @@ function Blank() {
                   <div>
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-600">
                       <span className="text-gray-200">Date & Time</span>
-                      <span>Dec 19, 2020 20:47:04</span>
+                      <span>
+                        {new Date(values.burn_block_time).toDateString()}
+                      </span>
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-600">
                       <span className="text-gray-200">Block</span>
-                      <span>1,452,658</span>
+                      <span>{values.block_height}</span>
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-600">
                       <span className="text-gray-200">Confirmations</span>
@@ -80,7 +156,7 @@ function Blank() {
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-600">
                       <span className="text-gray-200">Node Fee</span>
-                      <span>0.0125 STX</span>
+                      <span>{values.fee_rate} STX</span>
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-600">
                       <span className="text-gray-200">Sats Used</span>
@@ -94,11 +170,11 @@ function Blank() {
                   <div className="pl-4">
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-600">
                       <span className="text-error-500">Sender</span>
-                      <span>STXs5d654896....dfg26fg</span>
+                      <span>{values.sender_address}</span>
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-600">
                       <span className="text-primary-400">Receiver</span>
-                      <span>STXtghyj4uj451....y6s9d81</span>
+                      <span>{values.token_transfer.amount}</span>
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-600">
                       <span>Amount</span>

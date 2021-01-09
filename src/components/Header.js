@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { SidebarContext } from "../context/SidebarContext";
 import { SearchIcon, MenuIcon } from "../icons";
 import { Avatar, Input, Dropdown } from "@windmill/react-ui";
-
+import { useSelector } from "react-redux";
 import { VscArrowSmallRight } from "react-icons/vsc";
 import { FiCopy } from "react-icons/fi";
 import { userSession } from "../scripts/auth";
@@ -13,9 +13,10 @@ import { userSession } from "../scripts/auth";
 // hasAvatar is a dummy check to simulate this process without a check in place
 import UserImage from "../assets/img/avatar-0.jpg";
 import AvatarPlaceholder from "react-avatar";
+import axios from "axios";
 
 const logout = () => {
-  userSession.signUserOut(window.location.origin);
+  axios.delete(`process.env.REACT_APP_BACKENDURL/logout`);
 };
 const hasAvatar = false;
 
@@ -24,7 +25,7 @@ const hasAvatar = false;
 /* -------------------------------------------------------------------------- */
 function Header() {
   const { toggleSidebar } = useContext(SidebarContext);
-
+  const user = useSelector((state) => state.user);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   function handleProfileClick() {
@@ -68,7 +69,7 @@ function Header() {
               aria-haspopup="true"
             >
               <span className="hidden mr-3 text-sm text-white lg:inline-block">
-                Andy James
+                {user.username}
               </span>
               {hasAvatar ? (
                 <Avatar
@@ -78,7 +79,7 @@ function Header() {
                   aria-hidden="true"
                 />
               ) : (
-                <AvatarPlaceholder name="Andy James" round={true} size="32" />
+                <AvatarPlaceholder name="Username" round={true} size="32" />
               )}
             </button>
             <Dropdown
@@ -101,10 +102,10 @@ function Header() {
               </div>
 
               <h2 className="mt-3 text-lg font-semibold text-gray-700">
-                Andy James
+                {user.username}
               </h2>
               <div className="flex items-center justify-center mt-4 mb-8">
-                <span className="mr-4">STX524...sjgi5478</span>
+                <span className="mr-4">{user.stxAddress[0]}</span>
                 <FiCopy className="w-4 h-4" />
               </div>
               <button className="btn btn-primary">Become a STX Miner</button>

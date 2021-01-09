@@ -48,6 +48,9 @@
     "react-tippy": "^1.4.0",
     "react-transition-group": "4.4.1",
     "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0",
     "stxcalculator": "^1.0.3"
   },
   "devDependencies": {

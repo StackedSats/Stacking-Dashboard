@@ -23,6 +23,7 @@ import {
 import ContextNav from "../components/ContextNav";
 import { DummyGraph, DummyGraph2, Explorer } from "../icons";
 import { userSession, getPerson, getUserData } from "../scripts/auth";
+import { useSelector } from "react-redux";
 
 import "../assets/css/tippy.css";
 
@@ -82,6 +83,8 @@ const Right = () => {
 };
 
 function MyPortfolio() {
+  const state = useSelector((state) => state.user);
+  console.log(state);
   const [portfolio, setPortfolio] = useState({
     balance: "0",
     total_sent: "0",
@@ -97,6 +100,7 @@ function MyPortfolio() {
 
   useEffect(() => {
     const data = getPerson();
+    console.log(data);
     const fetchData = async () => {
       const result = await axios.get(
         `https://stacks-node-api.blockstack.org/extended/v1/address/${data._profile.stxAddress}/balances`
@@ -105,7 +109,7 @@ function MyPortfolio() {
       setPortfolio(result.data.stx);
     };
     fetchData();
-  }, []);
+  }, [state.username]);
 
   console.log(portfolio);
   return (
@@ -380,48 +384,24 @@ function MyPortfolio() {
                 </div>
 
                 <ul>
-                  <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
-                    <div className="flex flex-wrap justify-between">
-                      <div className="flex flex-wrap items-center space-x-3">
-                        <span>OneI5ka...</span>
-                        <ContextNav
-                          menuItems={<MenuItems />}
-                          buttonIcon={<MenuIcon />}
-                        ></ContextNav>
-                      </div>
-                      <div className="flex">
-                        <span>$89.56</span>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
-                    <div className="flex flex-wrap justify-between">
-                      <div className="flex flex-wrap items-center space-x-3">
-                        <span>OneI5ka...</span>
-                        <ContextNav
-                          menuItems={<MenuItems />}
-                          buttonIcon={<MenuIcon />}
-                        ></ContextNav>
-                      </div>
-                      <div className="flex">
-                        <span>$89.56</span>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
-                    <div className="flex flex-wrap justify-between">
-                      <div className="flex flex-wrap items-center space-x-3">
-                        <span>OneI5ka...</span>
-                        <ContextNav
-                          menuItems={<MenuItems />}
-                          buttonIcon={<MenuIcon />}
-                        ></ContextNav>
-                      </div>
-                      <div className="flex">
-                        <span>$89.56</span>
-                      </div>
-                    </div>
-                  </li>
+                  {state.stxAddress.map((value) => {
+                    return (
+                      <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
+                        <div className="flex flex-wrap justify-between">
+                          <div className="flex flex-wrap items-center space-x-3">
+                            <span>{value}</span>
+                            <ContextNav
+                              menuItems={<MenuItems />}
+                              buttonIcon={<MenuIcon />}
+                            ></ContextNav>
+                          </div>
+                          <div className="flex">
+                            <span>$89.56</span>
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
               <hr className="border-gray-500" />
@@ -440,6 +420,27 @@ function MyPortfolio() {
                 <div>
                   <span className="text-warning-500">3.25</span> BTC |{" "}
                   <span className="text-success-600">245,635</span> USD
+                  <br></br>
+                  <ul>
+                    {state.btcAddress.map((value) => {
+                      return (
+                        <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
+                          <div className="flex flex-wrap justify-between">
+                            <div className="flex flex-wrap items-center space-x-3">
+                              <span>{value}</span>
+                              <ContextNav
+                                menuItems={<MenuItems />}
+                                buttonIcon={<MenuIcon />}
+                              ></ContextNav>
+                            </div>
+                            <div className="flex">
+                              <span>$89.56</span>
+                            </div>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
               </div>
             </CardBody>
@@ -463,7 +464,7 @@ function MyPortfolio() {
                   </div>
                   <div className="flex space-x-2">
                     <span className="text-lg font-medium text-success-400">
-                      80,000 STX
+                      {portfolio.balance}
                     </span>
                   </div>
                 </div>
@@ -472,7 +473,7 @@ function MyPortfolio() {
                     <span>Available Balance</span>
                   </div>
                   <div className="flex space-x-2">
-                    <span>80,000 STX</span>
+                    <span>{portfolio.balance - portfolio.locked}</span>
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center justify-between py-2">
@@ -497,51 +498,6 @@ function MyPortfolio() {
               <button className="mt-4 mb-6 btn btn-outline-primary btn-sm btn-block">
                 Stack now
               </button>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-medium">Total Reward</h3>
-                  <Tooltip
-                    // options
-                    maxWidth="100px"
-                    html={
-                      <div className="text-xs" style={{ width: 180 }}>
-                        XTZ rewards are automatically transfered to you
-                        delegation address
-                      </div>
-                    }
-                    position="top"
-                  >
-                    <FiInfo />
-                  </Tooltip>
-                </div>
-                <div>
-                  <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-400">
-                    <span>Total Reward</span>
-                    <span className="text-lg text-warning-500">$3.53</span>
-                  </div>
-                  <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-400">
-                    <span>Daily Reward</span>
-                    <span className="">$3.53</span>
-                  </div>
-                  <div className="flex flex-wrap items-center justify-between py-2 text-gray-300">
-                    <span>Pending Reward</span>
-                    <span>$3.53</span>
-                  </div>
-                </div>
-                <button className="mt-4 mb-6 btn btn-outline-warning btn-sm btn-block">
-                  Claim your BTC Reward
-                </button>
-                <div className="-mb-8">
-                  <div className="flex justify-end mb-4">
-                    <div>
-                      <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
-                        <option>Daily</option>
-                      </Select>
-                    </div>
-                  </div>
-                  <DummyGraph2 className="w-full"></DummyGraph2>
-                </div>
-              </div>
             </CardBody>
           </Card>
           <Card>
@@ -597,41 +553,6 @@ function MyPortfolio() {
               <button className="mt-4 mb-6 btn btn-outline-gray btn-sm btn-block">
                 Stack now
               </button>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-medium">STX Reward</h3>
-                  <FiInfo />
-                </div>
-                <div>
-                  <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-400">
-                    <span>STX Mining Reward</span>
-                    <span className="text-lg text-warning-500">
-                      125,000 STX
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-400">
-                    <span>Daily STX Mining Reward</span>
-                    <span className="">5,000 STX</span>
-                  </div>
-                  <div className="flex flex-wrap items-center justify-between py-2 text-gray-300">
-                    <span>Pending STX Mining Reward</span>
-                    <span>10,000 STX</span>
-                  </div>
-                </div>
-                <button className="mt-4 mb-6 btn btn-outline-warning btn-sm btn-block">
-                  Claim your STX Mining Reward
-                </button>
-                <div className="-mb-8">
-                  <div className="flex justify-end mb-4">
-                    <div>
-                      <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
-                        <option>Daily</option>
-                      </Select>
-                    </div>
-                  </div>
-                  <DummyGraph2 className="w-full"></DummyGraph2>
-                </div>
-              </div>
             </CardBody>
           </Card>
         </div>

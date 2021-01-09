@@ -1,10 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 import { Label, Input } from "@windmill/react-ui";
 import { FiArrowRight } from "react-icons/fi";
+import { useDispatch } from "react-redux";
+import { userDetails } from "../redux/reducers";
+import { useHistory } from "react-router-dom";
 
 function Login() {
+  let history = useHistory();
+  const [username, setusername] = useState("");
+  const [password, setpassword] = useState("");
+  const dispatch = useDispatch();
+
+  const changeName = (e) => {
+    setusername(e.target.value);
+  };
+
+  const changePass = (e) => {
+    setpassword(e.target.value);
+  };
+  const login = async () => {
+    console.log(process.env);
+    const loggingIn = await axios({
+      url: `${process.env.REACT_APP_BACKENDURL}/login`,
+      data: { username, password },
+      method: "post",
+    });
+    console.log(loggingIn);
+    localStorage.setItem("auth", loggingIn.data.token);
+    dispatch({ type: userDetails, payload: loggingIn.data.user });
+    history.push("/app/network");
+  };
   return (
     <div className="flex items-center min-h-screen p-6 bg-gray-900">
       <div className="flex-1 h-full max-w-md mx-auto overflow-hidden bg-white rounded-lg shadow-xl">
@@ -20,6 +47,8 @@ function Login() {
                 className="py-3 mt-1 bg-gray-50"
                 type="email"
                 placeholder="john@doe.com"
+                onChange={changeName}
+                value={username}
               />
             </Label>
 
@@ -29,16 +58,19 @@ function Login() {
                 className="py-3 mt-1 bg-gray-50"
                 type="password"
                 placeholder="***************"
+                onChange={changePass}
+                value={password}
               />
             </Label>
 
-            <Link
+            <div
               className="mt-4 btn btn-primary btn-lg btn-block"
               block
               to="/app/my-portfolio"
+              onClick={login}
             >
               Log in
-            </Link>
+            </div>
 
             <p className="mt-4">
               <Link

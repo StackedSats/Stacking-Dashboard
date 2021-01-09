@@ -7,6 +7,8 @@ import ThemedSuspense from "./components/ThemedSuspense";
 import { Windmill } from "@windmill/react-ui";
 import * as serviceWorker from "./serviceWorker";
 import theme from "./theme";
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
 
 // if (process.env.NODE_ENV !== 'production') {
 //   const axe = require('react-axe')
@@ -14,13 +16,15 @@ import theme from "./theme";
 // }
 
 ReactDOM.render(
-  <SidebarProvider>
-    <Suspense fallback={<ThemedSuspense />}>
-      <Windmill theme={theme} usePreferences>
-        <App />
-      </Windmill>
-    </Suspense>
-  </SidebarProvider>,
+  <Provider store={store}>
+    <SidebarProvider>
+      <Suspense fallback={<ThemedSuspense />}>
+        <Windmill theme={theme} usePreferences>
+          <App />
+        </Windmill>
+      </Suspense>
+    </SidebarProvider>
+  </Provider>,
   document.getElementById("root")
 );
 
