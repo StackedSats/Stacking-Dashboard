@@ -1,19 +1,25 @@
 import { openContractCall } from "@blockstack/connect";
+import logo from "../icons/logo.svg";
+import btcAddress from "./setup";
 
-export default async function confirmParticipation(poxAddr) {
+async function delegateStx(delegateTo, poxAddr, rewardCycle) {
   const options = {
     contractAddress: "ST000000000000000000002AMW42H",
     contractName: "pox",
     functionName: "stack-aggregation-commit",
     functionArgs: [
       {
-        "pox-add": poxAddr,
+        type: "buff",
+        value: btcAddress(poxAddr),
+      },
+      {
+        type: "uint",
+        value: rewardCycle,
       },
     ],
-    authOrigin,
     appDetails: {
-      name: "SuperApp",
-      icon: "https://example.com/icon.png",
+      name: "StakedStats",
+      icon: logo,
     },
     finished: (data) => {
       console.log("TX ID:", data.txId);
