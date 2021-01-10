@@ -1,7 +1,7 @@
 import { openContractCall } from "@blockstack/connect";
 import logo from "../icons/logo.svg";
 import btcAddress from "./setup";
-export default async function delegateSTX({ poxAddr, amountSTX, delegateToo }) {
+async function delegateSTX({ poxAddr, amountSTX, delegateToo }) {
   const options = {
     contractAddress: "ST000000000000000000002AMW42H",
     contractName: "pox",

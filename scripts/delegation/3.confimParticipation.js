@@ -29,3 +29,5 @@ async function delegateStx(delegateTo, poxAddr, rewardCycle) {
 
   await openContractCall(options);
 }
+
+export default delegateStx;
