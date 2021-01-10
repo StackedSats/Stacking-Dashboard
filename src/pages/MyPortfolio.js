@@ -99,7 +99,7 @@ function MyPortfolio() {
     burnchain_unlock_height: 0,
   });
   const [addressValue, setaddressValue] = useState([]);
-
+  const [stx, setSTX] = useState(0);
   useEffect(() => {
     const data = getPerson();
     console.log(data);
@@ -426,7 +426,14 @@ function MyPortfolio() {
                     <span>Stacking Balance</span>
                   </div>
                   <div className="flex space-x-2">
-                    <span>100 STX</span>
+                    <input
+                      type="number"
+                      value={stx}
+                      onChange={(e) => {
+                        console.log(stx);
+                        setSTX(e.target.value);
+                      }}
+                    ></input>
                   </div>
                 </div>
               </div>
