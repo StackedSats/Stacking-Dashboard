@@ -1,18 +1,27 @@
-import React, { lazy } from "react";
+import React, { lazy, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from "react-router-dom";
+import axios from "axios";
 import AccessibleNavigationAnnouncer from "./components/AccessibleNavigationAnnouncer";
-
+import { useDispatch } from "react-redux";
+import { PRICES } from "./redux/reducers";
 const Layout = lazy(() => import("./containers/Layout"));
 const Login = lazy(() => import("./pages/Login"));
 const CreateAccount = lazy(() => import("./pages/CreateAccount"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 
 function App() {
+  const disptach = useDispatch();
+
+  useEffect(() => {
+    axios.get("http://207.148.25.63:3500/data").then((res) => {
+      disptach({ type: PRICES, payload: res.data });
+    });
+  }, [disptach]);
   return (
     <>
       <Router>

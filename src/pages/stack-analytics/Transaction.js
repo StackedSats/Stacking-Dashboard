@@ -3,6 +3,7 @@ import { getPerson } from "../../scripts/auth";
 import PageTitle from "../../components/Typography/PageTitle";
 import { Card, CardBody, Select } from "@windmill/react-ui";
 import { FiDownload, FiCopy } from "react-icons/fi";
+import { useSelector } from "react-redux";
 import ts from "../../assets/img/graph-transfer-summary.png";
 import tf from "../../assets/img/graph-transaction-fees.png";
 import axios from "axios";
@@ -91,22 +92,13 @@ function Blank({
     ],
   });
 
-  const [totalBalance, setTotalBalance] = useState({
-    stxusd: 40068.1243982181,
-    btcusd: 0.49098332415705,
-    btcTxFeeResult: 3.3745078800000003,
-    liquidStxSupplyResult: 41006245332819816,
-    stxTransactionFeeReult: 1,
-  });
+  const totalBalance = useSelector((state) => state.prices);
 
   useEffect(() => {
     axios
       .get(`https://stacks-node-api.blockstack.org/extended/v1/tx/${tx_id}`)
       .then((res) => {
         setValues(res.data);
-        axios.get("http://207.148.25.63:3500/data").then((res) => {
-          setTotalBalance(res.data);
-        });
       });
   }, [tx_id]);
   return (

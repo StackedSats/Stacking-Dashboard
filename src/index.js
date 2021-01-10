@@ -7,8 +7,9 @@ import ThemedSuspense from "./components/ThemedSuspense";
 import { Windmill } from "@windmill/react-ui";
 import * as serviceWorker from "./serviceWorker";
 import theme from "./theme";
-import { store } from "./redux/store";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/lib/integration/react";
+import { persistor, store } from "./redux/store";
 
 // if (process.env.NODE_ENV !== 'production') {
 //   const axe = require('react-axe')
@@ -17,13 +18,15 @@ import { Provider } from "react-redux";
 
 ReactDOM.render(
   <Provider store={store}>
-    <SidebarProvider>
-      <Suspense fallback={<ThemedSuspense />}>
-        <Windmill theme={theme} usePreferences>
-          <App />
-        </Windmill>
-      </Suspense>
-    </SidebarProvider>
+    <PersistGate loading={<ThemedSuspense />} persistor={persistor}>
+      <SidebarProvider>
+        <Suspense fallback={<ThemedSuspense />}>
+          <Windmill theme={theme} usePreferences>
+            <App />
+          </Windmill>
+        </Suspense>
+      </SidebarProvider>
+    </PersistGate>
   </Provider>,
   document.getElementById("root")
 );

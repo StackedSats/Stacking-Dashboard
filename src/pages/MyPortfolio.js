@@ -83,8 +83,9 @@ const Right = () => {
 };
 
 function MyPortfolio() {
+  const prices = useSelector((state) => state.prices);
   const state = useSelector((state) => state.user);
-  console.log(state);
+  const [txs, setTxs] = useState([]);
   const [portfolio, setPortfolio] = useState({
     balance: "0",
     total_sent: "0",
@@ -97,6 +98,7 @@ function MyPortfolio() {
     burnchain_lock_height: 0,
     burnchain_unlock_height: 0,
   });
+  const [addressValue, setaddressValue] = useState([]);
 
   useEffect(() => {
     const data = getPerson();
@@ -105,13 +107,33 @@ function MyPortfolio() {
       const result = await axios.get(
         `https://stacks-node-api.blockstack.org/extended/v1/address/${data._profile.stxAddress}/balances`
       );
-      console.log(result);
       setPortfolio(result.data.stx);
+
+      const values = await axios({
+        url: `${process.env.REACT_APP_BACKENDURL}/btcAddressReward`,
+        method: "post",
+        data: state,
+      });
+
+      const vs = [];
+
+      for (let i of state.stxAddress) {
+        try {
+          const result = await axios.get(
+            `https://stacks-node-api.blockstack.org/extended/v1/address/${i}/balances`
+          );
+          vs.push(result);
+        } catch (e) {
+          vs.push(0);
+        }
+      }
+
+      setaddressValue(vs);
+      setTxs(values.data.txs);
     };
     fetchData();
-  }, [state.username]);
+  }, [state, state.username]);
 
-  console.log(portfolio);
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>
@@ -194,154 +216,69 @@ function MyPortfolio() {
                       </tr>
                     </TableHeader>
                     <TableBody className="text-lg divide-gray-500">
-                      <TableRow>
-                        <TableCell>
-                          <div className="text-lg text-white">17 Dec 2020</div>
-                          <span className="text-sm">09:06:30 GMT</span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-white btn btn-outline-gray btn-xs">
-                            Testnet
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">Stackedsats</div>
-                          <span>OneI5ka...68das65</span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">
-                            OneI5ka...68das65
-                          </div>
-                          <div className="flex items-center text-sm text-primary-400">
-                            <FiArrowRight />
-                            <span className="ml-1">Stacks</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">800 STX</div>
-                          <div className="text-sm">
-                            <span className="text-warning-500">3.25</span> BTC |{" "}
-                            <span className="text-success-600">245,635</span>{" "}
-                            USD
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex justify-center">
-                            <Explorer />
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="text-lg text-white">17 Dec 2020</div>
-                          <span className="text-sm">09:06:30 GMT</span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-white btn btn-outline-gray btn-xs">
-                            Testnet
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">Stackedsats</div>
-                          <span>OneI5ka...68das65</span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">
-                            OneI5ka...68das65
-                          </div>
-                          <div className="flex items-center text-sm text-warning-500">
-                            <FiArrowRight />
-                            <span className="ml-1">Bitcoin</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">800 STX</div>
-                          <div className="text-sm">
-                            <span className="text-warning-500">3.25</span> BTC |{" "}
-                            <span className="text-success-600">245,635</span>{" "}
-                            USD
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex justify-center">
-                            <Explorer />
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="text-lg text-white">17 Dec 2020</div>
-                          <span className="text-sm">09:06:30 GMT</span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-white btn btn-outline-gray btn-xs">
-                            Testnet
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">Stackedsats</div>
-                          <span>OneI5ka...68das65</span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">
-                            OneI5ka...68das65
-                          </div>
-                          <div className="flex items-center text-sm text-primary-400">
-                            <FiArrowRight />
-                            <span className="ml-1">Stacks</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">800 STX</div>
-                          <div className="text-sm">
-                            <span className="text-warning-500">3.25</span> BTC |{" "}
-                            <span className="text-success-600">245,635</span>{" "}
-                            USD
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex justify-center">
-                            <Explorer />
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="text-lg text-white">17 Dec 2020</div>
-                          <span className="text-sm">09:06:30 GMT</span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-white btn btn-outline-gray btn-xs">
-                            Testnet
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">Stackedsats</div>
-                          <span>OneI5ka...68das65</span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">
-                            OneI5ka...68das65
-                          </div>
-                          <div className="flex items-center text-sm text-warning-500">
-                            <FiArrowRight />
-                            <span className="ml-1">Bitcoin</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-white">800 STX</div>
-                          <div className="text-sm">
-                            <span className="text-warning-500">3.25</span> BTC |{" "}
-                            <span className="text-success-600">245,635</span>{" "}
-                            USD
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex justify-center">
-                            <Explorer />
-                          </div>
-                        </TableCell>
-                      </TableRow>
+                      {txs.map((value, index) => {
+                        return (
+                          <TableRow>
+                            <TableCell>
+                              <div className="text-lg text-white">
+                                {value.date}
+                              </div>
+                              <span className="text-sm">{value.date}</span>
+                            </TableCell>
+                            <TableCell>
+                              <span className="text-white btn btn-outline-gray btn-xs">
+                                Testnet
+                              </span>
+                            </TableCell>
+                            <TableCell>
+                              <div className="text-sm text-white">
+                                Stackedsats
+                              </div>
+                              <span>{value.from}</span>
+                            </TableCell>
+                            <TableCell>
+                              <div className="text-sm text-white">
+                                {value.to}
+                              </div>
+                              <div className="flex items-center text-sm text-warning-500">
+                                <FiArrowRight />
+                                <span className="ml-1">Bitcoin</span>
+                              </div>
+                              {/* <div className="flex items-center text-sm text-primary-400">
+                                <FiArrowRight />
+                                <span className="ml-1">Stacks</span>
+                              </div> */}
+                            </TableCell>
+                            <TableCell>
+                              <div className="text-sm text-white">
+                                {value.reward} STX
+                              </div>
+                              <div className="text-sm">
+                                <span className="text-warning-500">
+                                  {parseFloat(
+                                    value.reward /
+                                      (prices.stxusd * prices.btcusd)
+                                  ).toFixed(2)}
+                                </span>{" "}
+                                BTC |{" "}
+                                <span className="text-success-600">
+                                  {parseFloat(
+                                    prices.stxusd / value.reward
+                                  ).toFixed(2)}
+                                </span>{" "}
+                                USD
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <a href="https://testnet-explorer.blockstack.org/txid/0x7f5db3a604f738af695b0b10c0369c42fd7a0efbcc25115fa5711f074abf92b6">
+                                <div className="flex justify-center">
+                                  <Explorer />
+                                </div>
+                              </a>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -356,7 +293,9 @@ function MyPortfolio() {
               <div className="flex flex-wrap justify-between">
                 <div className="flex flex-wrap items-center">
                   <h2 className="mr-3 text-2xl font-medium">Portfolio</h2>
-                  <span className="text-gray-200">11 Addreses</span>
+                  <span className="text-gray-200">
+                    {state.stxAddress.length + state.btcAddress.length}
+                  </span>
                 </div>
                 <button className="flex items-center btn btn-outline-primary btn-xs">
                   <span className="mr-2 text-lg">+</span> Add Address
@@ -369,7 +308,9 @@ function MyPortfolio() {
                   <span className="text-gray-200">100%</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-2xl">459.48</span>
+                  <span className="text-2xl">
+                    {prices.stxusd * addressValue.reduce((a, b) => a + b, 0)}
+                  </span>
                   <span className="font-medium text-gray-200">STX</span>
                 </div>
               </div>
@@ -379,12 +320,14 @@ function MyPortfolio() {
                     <span>3 Addresses</span>
                   </div>
                   <div className="flex">
-                    <span>$89.56</span>
+                    <span>
+                      {prices.stxusd * addressValue.reduce((a, b) => a + b, 0)}
+                    </span>
                   </div>
                 </div>
 
                 <ul>
-                  {state.stxAddress.map((value) => {
+                  {state.stxAddress.map((value, index) => {
                     return (
                       <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
                         <div className="flex flex-wrap justify-between">
@@ -396,7 +339,7 @@ function MyPortfolio() {
                             ></ContextNav>
                           </div>
                           <div className="flex">
-                            <span>$89.56</span>
+                            <span>{addressValue[index]}</span>
                           </div>
                         </div>
                       </li>
@@ -411,7 +354,9 @@ function MyPortfolio() {
                   <span className="text-gray-200">100%</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-2xl">459.48</span>
+                  <span className="text-2xl">
+                    {addressValue.reduce((a, b) => a + b, 0)}
+                  </span>
                   <span className="font-medium text-gray-200">BTC</span>
                 </div>
               </div>
@@ -422,7 +367,7 @@ function MyPortfolio() {
                   <span className="text-success-600">245,635</span> USD
                   <br></br>
                   <ul>
-                    {state.btcAddress.map((value) => {
+                    {state.btcAddress.map((value, index) => {
                       return (
                         <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
                           <div className="flex flex-wrap justify-between">
@@ -434,7 +379,7 @@ function MyPortfolio() {
                               ></ContextNav>
                             </div>
                             <div className="flex">
-                              <span>$89.56</span>
+                              <span>89$</span>
                             </div>
                           </div>
                         </li>
@@ -449,7 +394,7 @@ function MyPortfolio() {
             <CardBody className="space-y-8 text-white">
               <div className="flex flex-wrap justify-between">
                 <div className="flex flex-wrap items-center">
-                  <h2 className="mr-3 text-2xl font-medium">Total balance</h2>
+                  <h2 className="mr-3 text-2xl font-medium">STX balance</h2>
                 </div>
                 <div>
                   <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
@@ -504,7 +449,7 @@ function MyPortfolio() {
             <CardBody className="space-y-8 text-white">
               <div className="flex flex-wrap justify-between">
                 <div className="flex flex-wrap items-center">
-                  <h2 className="mr-3 text-2xl font-medium">STX balance</h2>
+                  <h2 className="mr-3 text-2xl font-medium">BTC balance</h2>
                 </div>
                 <div>
                   <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
@@ -519,7 +464,10 @@ function MyPortfolio() {
                   </div>
                   <div className="flex space-x-2">
                     <span className="text-lg font-medium text-success-400">
-                      80,000 STX
+                      {parseFloat(
+                        portfolio.balance / (prices.stxusd * prices.btcusd)
+                      ).toFixed(2)}
+                      BTC
                     </span>
                   </div>
                 </div>
@@ -528,7 +476,14 @@ function MyPortfolio() {
                     <span>Available Balance</span>
                   </div>
                   <div className="flex space-x-2">
-                    <span>80,000 STX</span>
+                    <span>
+                      {" "}
+                      {parseFloat(
+                        portfolio.balance -
+                          portfolio.locked / (prices.stxusd * prices.btcusd)
+                      ).toFixed(2)}{" "}
+                      BTC
+                    </span>
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center justify-between py-2">

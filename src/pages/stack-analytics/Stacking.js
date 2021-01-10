@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import CountdownTimer from "../../components/CountdownTimer";
@@ -18,10 +18,11 @@ import {
 } from "@windmill/react-ui";
 
 import { TabGroup } from "@statikly/funk";
-
+import { useSelector } from "react-redux";
 import { FiSearch } from "react-icons/fi";
 
 import tf from "../../assets/img/graph-transaction-fees.png";
+import axios from "axios";
 
 const Left = () => {
   return (
@@ -56,6 +57,19 @@ const Right = () => {
 };
 
 function Blank() {
+  const [txs, setTxs] = useState([]);
+  const prices = useSelector((state) => state.prices);
+  useEffect(() => {
+    const fetch = async () => {
+      const data = await axios.get(
+        `${process.env.REACT_APP_BACKENDURL}/rewardHistory`
+      );
+      console.log(data);
+      setTxs(data.data);
+    };
+
+    fetch();
+  }, []);
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>
@@ -83,14 +97,14 @@ function Blank() {
                         >
                           Distributed Rewards
                         </TabGroup.Tab>
-                        <TabGroup.Tab
+                        {/* <TabGroup.Tab
                           index={1}
                           className="px-4 py-2 mr-3 text-xl transition-colors duration-150"
                           activeClassName="text-primary-500 dark:text-white"
                           inactiveClassName="text-gray-400 dark:text-gray-300"
                         >
                           Total BTC Rewards
-                        </TabGroup.Tab>
+                        </TabGroup.Tab> */}
                       </TabGroup.TabList>
                     </div>
                     <div>
@@ -124,116 +138,43 @@ function Blank() {
                           </tr>
                         </TableHeader>
                         <TableBody className="text-lg dark:divide-gray-500">
-                          <TableRow>
-                            <TableCell>
-                              <div className="text-lg text-white">Today</div>
-                              <span className="text-base">09:06:30 GMT</span>
-                            </TableCell>
-                            <TableCell>
-                              <span>
-                                STX265sddsffsdfsdf5dg4b8nj2gh2ghd65fsd4fr
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-white ">465,465,416 STX</div>
-                              <div className="">
-                                <span className="text-warning-500">3.25</span>{" "}
-                                BTC |{" "}
-                                <span className="text-success-600">
-                                  245,635
-                                </span>{" "}
-                                USD
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="text-lg text-white">Today</div>
-                              <span className="text-base">09:06:30 GMT</span>
-                            </TableCell>
-                            <TableCell>
-                              <span>
-                                STX265sddsffsdfsdf5dg4b8nj2gh2ghd65fsd4fr
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-white ">465,465,416 STX</div>
-                              <div className="">
-                                <span className="text-warning-500">3.25</span>{" "}
-                                BTC |{" "}
-                                <span className="text-success-600">
-                                  245,635
-                                </span>{" "}
-                                USD
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="text-lg text-white">Today</div>
-                              <span className="text-base">09:06:30 GMT</span>
-                            </TableCell>
-                            <TableCell>
-                              <span>
-                                STX265sddsffsdfsdf5dg4b8nj2gh2ghd65fsd4fr
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-white ">465,465,416 STX</div>
-                              <div className="">
-                                <span className="text-warning-500">3.25</span>{" "}
-                                BTC |{" "}
-                                <span className="text-success-600">
-                                  245,635
-                                </span>{" "}
-                                USD
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="text-lg text-white">Today</div>
-                              <span className="text-base">09:06:30 GMT</span>
-                            </TableCell>
-                            <TableCell>
-                              <span>
-                                STX265sddsffsdfsdf5dg4b8nj2gh2ghd65fsd4fr
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-white ">465,465,416 STX</div>
-                              <div className="">
-                                <span className="text-warning-500">3.25</span>{" "}
-                                BTC |{" "}
-                                <span className="text-success-600">
-                                  245,635
-                                </span>{" "}
-                                USD
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="text-lg text-white">Today</div>
-                              <span className="text-base">09:06:30 GMT</span>
-                            </TableCell>
-                            <TableCell>
-                              <span>
-                                STX265sddsffsdfsdf5dg4b8nj2gh2ghd65fsd4fr
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-white ">465,465,416 STX</div>
-                              <div className="">
-                                <span className="text-warning-500">3.25</span>{" "}
-                                BTC |{" "}
-                                <span className="text-success-600">
-                                  245,635
-                                </span>{" "}
-                                USD
-                              </div>
-                            </TableCell>
-                          </TableRow>
+                          {txs.map((value, index) => {
+                            return (
+                              <TableRow>
+                                <TableCell>
+                                  <div className="text-lg text-white">
+                                    Today
+                                  </div>
+                                  <span className="text-base">
+                                    {value.date} GMT
+                                  </span>
+                                </TableCell>
+                                <TableCell>
+                                  <span>{value.to}</span>
+                                </TableCell>
+                                <TableCell>
+                                  <div className="text-white ">
+                                    {value.reward} STX
+                                  </div>
+                                  <div className="">
+                                    <span className="text-warning-500">
+                                      {parseFloat(
+                                        value.reward /
+                                          (prices.stxusd * prices.btcusd)
+                                      ).toFixed(2)}
+                                    </span>{" "}
+                                    BTC |{" "}
+                                    <span className="text-success-600">
+                                      {parseFloat(
+                                        prices.stxusd / value.reward
+                                      ).toFixed(2)}
+                                    </span>{" "}
+                                    USD
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
                         </TableBody>
                       </Table>
                     </TableContainer>
@@ -251,7 +192,7 @@ function Blank() {
             </div>
           </CardBody>
         </Card>
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <div className="grid grid-cols-1 mb-8 xl:gap-6 xl:grid-cols-3">
             <div className="col-span-2">
               <Card className="mb-8 shadow-md">
@@ -513,7 +454,7 @@ function Blank() {
               </Card>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

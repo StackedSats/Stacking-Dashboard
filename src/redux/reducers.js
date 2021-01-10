@@ -2,6 +2,8 @@ import { combineReducers } from "redux";
 
 export const STXTotalVolume = "STXTotalVolume";
 export const userDetails = "userDetails";
+export const PRICES = "prices";
+
 export const updateVolume = (
   state = { STXTotalVolume: "Please Sign In" },
   action
@@ -26,4 +28,21 @@ export const user = (
   }
 };
 
-export const reducer = combineReducers({ updateVolume, user });
+const stateValues = {
+  stxusd: 40068.1243982181,
+  btcusd: 0.49098332415705,
+  btcTxFeeResult: 3.3745078800000003,
+  liquidStxSupplyResult: 41006245332819816,
+  stxTransactionFeeReult: 1,
+};
+
+export const prices = (state = stateValues, action) => {
+  switch (action.type) {
+    case PRICES:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+export const reducer = combineReducers({ updateVolume, user, prices });

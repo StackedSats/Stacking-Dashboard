@@ -9,7 +9,7 @@ import logger from "redux-logger";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user"],
+  whitelist: ["user", "prices"],
   stateReconciler: autoMergeLevel2,
 };
 
