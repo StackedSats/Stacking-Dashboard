@@ -1,7 +1,18 @@
 import { openContractCall } from "@blockstack/connect";
+import { bufferCV, uintCV, tupleCV } from "@stacks/transactions";
+import BN from "bn.js";
 import logo from "../icons/logo.svg";
-import btcAddress from "./setup";
+import { decodeBtcAddress } from "./utils";
+
 async function delegateSTX({ poxAddr, amountSTX, delegateToo }) {
+  const { hashMode, data } = decodeBtcAddress(poxAddr);
+  const hashModeBuffer = bufferCV(new BN(hashMode, 10).toBuffer());
+  const hashbytes = bufferCV(data);
+  const poxAddressCV = tupleCV({
+    hashbytes,
+    version: hashModeBuffer,
+  });
+
   const options = {
     contractAddress: "ST000000000000000000002AMW42H",
     contractName: "pox",
@@ -9,7 +20,7 @@ async function delegateSTX({ poxAddr, amountSTX, delegateToo }) {
     functionArgs: [
       {
         type: "uint",
-        value: amountSTX,
+        value: uintCV(amountSTX.toString()),
       },
       {
         // delegate too
@@ -19,7 +30,7 @@ async function delegateSTX({ poxAddr, amountSTX, delegateToo }) {
       {
         // poxaddr
         type: "buff",
-        value: btcAddress(poxAddr),
+        value: uintCV(poxAddressCV.toString()),
       },
     ],
 

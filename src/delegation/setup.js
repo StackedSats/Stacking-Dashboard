@@ -9,10 +9,10 @@ const btcAddress = (addr) =>
 
 export { btcAddress };
 
-(async function abc() {
+async function abc() {
   const infoApi = new InfoApi();
   const [contractAddress, contractName] = (
     await infoApi.getPoxInfo()
   ).contract_id.split(".");
   console.log(contractAddress, contractName);
-})();
+}

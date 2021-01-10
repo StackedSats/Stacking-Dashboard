@@ -1,6 +1,10 @@
 import { openContractCall } from "@blockstack/connect";
 import logo from "../icons/logo.svg";
 import btcAddress from "./setup";
+import { bufferCV, uintCV, tupleCV } from "@stacks/transactions";
+import BN from "bn.js";
+import { decodeBtcAddress } from "./utils";
+
 // ST000000000000000000002AMW42H
 // name : pox
 export default async function delegationLock({
@@ -10,7 +14,14 @@ export default async function delegationLock({
   htLockPeriod,
   amountustx,
 }) {
-  // Here's an example of options:
+  const { hashMode, data } = decodeBtcAddress(poxAddr);
+  const hashModeBuffer = bufferCV(new BN(hashMode, 10).toBuffer());
+  const hashbytes = bufferCV(data);
+  const poxAddressCV = tupleCV({
+    hashbytes,
+    version: hashModeBuffer,
+  });
+
   const options = {
     contractAddress: "ST000000000000000000002AMW42H",
     contractName: "pox",
@@ -18,24 +29,24 @@ export default async function delegationLock({
     functionArgs: [
       {
         type: "uint",
-        value: stxValue,
+        value: uintCV(stxValue.toString()),
       },
       {
         type: "principal",
-        value: stacker,
+        value: bufferCV(stacker.toValue()),
       },
       {
         type: "uint",
-        value: amountustx,
+        value: uintCV(amountustx.toString()),
       },
 
       {
         type: "buff",
-        value: btcAddress(poxaddr),
+        value: poxAddressCV,
       },
       {
         type: "uint",
-        value: htLockPeriod,
+        value: uintCV(htLockPeriod.toString()),
       },
     ],
     appDetails: {

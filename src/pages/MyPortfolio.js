@@ -24,6 +24,7 @@ import ContextNav from "../components/ContextNav";
 import { DummyGraph, DummyGraph2, Explorer } from "../icons";
 import { userSession, getPerson, getUserData } from "../scripts/auth";
 import { useSelector } from "react-redux";
+import delegateSTX from "../delegation/1.delegatestx";
 
 import "../assets/css/tippy.css";
 
@@ -133,6 +134,15 @@ function MyPortfolio() {
     };
     fetchData();
   }, [state, state.username]);
+
+  const onStack = async () => {
+    const delegateStx = await delegateSTX({
+      poxAddr: "n2VrgRFbKvcesbqerVtJEC8p5Lr2LQKtmB",
+      amountSTX: stx,
+      delegateToo: "ST3K2B2FH1AYXD26WV6YZY4DAA82AZNK967BNB9BK",
+    });
+    console.log(delegateStx);
+  };
 
   return (
     <>
@@ -447,7 +457,10 @@ function MyPortfolio() {
                 </div>
                 <DummyGraph className="w-full"></DummyGraph>
               </div>
-              <button className="mt-4 mb-6 btn btn-outline-primary btn-sm btn-block">
+              <button
+                className="mt-4 mb-6 btn btn-outline-primary btn-sm btn-block"
+                onClick={onStack}
+              >
                 Stack now
               </button>
             </CardBody>
