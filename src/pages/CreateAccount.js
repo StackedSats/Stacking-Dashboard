@@ -1,10 +1,24 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 
 import { Label, Input } from "@windmill/react-ui";
 import { FiArrowRight } from "react-icons/fi";
+import axios from "axios";
 
 function Login() {
+  const history = useHistory();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const register = async () => {
+    const token = await axios.post(
+      `${process.env.REACT_APP_BACKENDURL}/register`,
+      { username, password }
+    );
+    localStorage.setItem("stacksauth", token);
+    history.push("/login");
+  };
+
   return (
     <div className="flex items-center min-h-screen p-6 bg-gray-900">
       <div className="flex-1 h-full max-w-md mx-auto overflow-hidden bg-white rounded-lg shadow-xl">
@@ -20,6 +34,8 @@ function Login() {
                 className="py-3 mt-1 bg-gray-50"
                 type="email"
                 placeholder="john@doe.com"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </Label>
 
@@ -29,16 +45,18 @@ function Login() {
                 className="py-3 mt-1 bg-gray-50"
                 type="password"
                 placeholder="***************"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Label>
 
-            <Link
+            <div
               className="mt-4 btn btn-primary btn-lg btn-block"
               block
-              to="/app/my-portfolio"
+              onClick={register}
             >
               Log in
-            </Link>
+            </div>
 
             <p className="mt-4 font-medium text-gray-300">
               By pressing “Create account” you agree to our &nbsp;
