@@ -11,6 +11,7 @@ import {
   TableBody,
   TableRow,
   TableContainer,
+  Input,
 } from "@windmill/react-ui";
 import {
   FiTrash2,
@@ -20,6 +21,7 @@ import {
   FiDownload,
   FiArrowRight,
 } from "react-icons/fi";
+
 import ContextNav from "../components/ContextNav";
 import { DummyGraph, DummyGraph2, Explorer } from "../icons";
 import { userSession, getPerson, getUserData } from "../scripts/auth";
@@ -83,7 +85,12 @@ function MyPortfolio() {
     burnchain_unlock_height: 0,
   });
   const [addressValue, setaddressValue] = useState([]);
+  const [stxAddress, setStxAddress] = useState([]);
+  const [btcAddress, addBTCAddress] = useState([]);
   const [stx, setSTX] = useState(0);
+
+  const wallet = getPerson();
+
   useEffect(() => {
     const data = getPerson();
     console.log(data);
@@ -125,6 +132,30 @@ function MyPortfolio() {
       delegateToo: "ST3K2B2FH1AYXD26WV6YZY4DAA82AZNK967BNB9BK",
     });
     console.log(delegateStx);
+  };
+
+  const addAddress = async () => {
+    const makeTheCal = await axios({
+      url: `${process.env.REACT_APP_BACKENDURL}/addresses}`,
+      data: {
+        username: state.username,
+        stxAddress: wallet._profile.stxAddress,
+        btcAddress,
+      },
+    });
+    console.log(makeTheCal);
+  };
+
+  const deleteAddress = async () => {
+    const makeTheCal = await axios({
+      url: `${process.env.REACT_APP_BACKENDURL}/addresses}`,
+      data: {
+        username: state.username,
+        stxAddress: wallet._profile.stxAddress,
+        btcAddress,
+      },
+    });
+    console.log(makeTheCal);
   };
 
   return (
@@ -287,7 +318,8 @@ function MyPortfolio() {
                 <div className="flex flex-wrap items-center">
                   <h2 className="mr-3 text-2xl font-medium">Portfolio</h2>
                   <span className="text-gray-200">
-                    {state.stxAddress.length + state.btcAddress.length}
+                    {wallet._profile.stxAddress.length +
+                      state.btcAddress.length}
                   </span>
                 </div>
                 <button className="flex items-center btn btn-outline-primary btn-xs">
@@ -424,14 +456,15 @@ function MyPortfolio() {
                     <span>Stacking Balance</span>
                   </div>
                   <div className="flex space-x-2">
-                    <input
+                    <Input
+                      className="py-3 mb-3 text-white bg-gray-800 border-none text-right"
+                      placeholder="STX Value"
                       type="number"
                       value={stx}
                       onChange={(e) => {
-                        console.log(stx);
                         setSTX(e.target.value);
                       }}
-                    ></input>
+                    ></Input>
                   </div>
                 </div>
               </div>
