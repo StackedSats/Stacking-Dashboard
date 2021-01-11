@@ -342,7 +342,7 @@ function MyPortfolio() {
               </div>
               <hr className="border-gray-500" />
               <div className="flex flex-wrap justify-between">
-                <div className="flex flex-wrap items-baseline space-x-2">
+                <div className="flex items-baseline space-x-2">
                   <span className="text-2xl">BTC</span>
                   <span className="text-gray-200">100%</span>
                 </div>
@@ -353,33 +353,38 @@ function MyPortfolio() {
                   <span className="font-medium text-gray-200">BTC</span>
                 </div>
               </div>
-              <div className="flex flex-wrap justify-between mb-3 text-gray-200">
-                <span>2 Addresses</span>
-                <div>
-                  <span className="text-warning-500">3.25</span> BTC |{" "}
-                  <span className="text-success-600">245,635</span> USD
-                  <br></br>
-                  <ul>
-                    {state.btcAddress.map((value, index) => {
-                      return (
-                        <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
-                          <div className="flex flex-wrap justify-between">
-                            <div className="flex flex-wrap items-center space-x-3">
-                              <span>{value}</span>
-                              <ContextNav
-                                menuItems={<MenuItems />}
-                                buttonIcon={<MenuIcon />}
-                              ></ContextNav>
-                            </div>
-                            <div className="flex">
-                              <span>89$</span>
-                            </div>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
+              <div>
+                <div className="flex flex-wrap justify-between mb-3 text-gray-200">
+                  <div className="flex">
+                    <span>2 Addresses</span>
+                  </div>
+                  <div className="flex">
+                    <span>
+                      {prices.stxusd * addressValue.reduce((a, b) => a + b, 0)}
+                    </span>
+                  </div>
                 </div>
+
+                <ul>
+                  {state.btcAddress.map((value, index) => {
+                    return (
+                      <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
+                        <div className="flex flex-wrap justify-between">
+                          <div className="flex flex-wrap items-center space-x-3">
+                            <span>{value}</span>
+                            <ContextNav
+                              menuItems={<MenuItems />}
+                              buttonIcon={<MenuIcon />}
+                            ></ContextNav>
+                          </div>
+                          <div className="flex">
+                            <span>{addressValue[index]}</span>
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </CardBody>
           </Card>

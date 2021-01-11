@@ -3,16 +3,25 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { Label, Input } from "@windmill/react-ui";
 import { useHistory } from "react-redux";
+import Joi from "joi";
+
+const schema = Joi.object({
+  username: Joi.string().email({ tlds: { allow: false } }),
+});
 
 function ForgotPassword() {
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState(false);
+  const [isError, setError] = useState("");
 
   const sendEmail = async () => {
-    await axios.post(`${process.env.REACT_APP_BACKENDURL}/forgotPassword`, {
-      username,
-    });
-    setMessage(true);
+    const { error } = schema.validate(username);
+    if (!error) {
+      await axios.post(`${process.env.REACT_APP_BACKENDURL}/forgotPassword`, {
+        username,
+      });
+      setMessage(true);
+    } else setError(true);
   };
   return (
     <div className="flex items-center min-h-screen p-6 bg-gray-900">
@@ -26,7 +35,6 @@ function ForgotPassword() {
               Please enter your email address below to get instructions for
               password recovery.
             </p>
-
             <Label>
               <span>Email</span>
               <Input
@@ -36,7 +44,6 @@ function ForgotPassword() {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </Label>
-
             <div
               className="mt-4 btn btn-primary btn-lg btn-block"
               block
@@ -46,14 +53,16 @@ function ForgotPassword() {
             </div>
             <a className="mt-4 text-gray-200 btn btn-link btn-block" href="/">
               Cancel
-            </a>
+            </a>{" "}
+            {isError && (
+              <p style={{ color: "red" }}>Please Enter a Valid Email</p>
+            )}
+            {message && (
+              <div style={{ color: "red" }} href="/">
+                Check your email !
+              </div>
+            )}
           </div>
-
-          {message && (
-            <div className="mt-4 text-gray-200 btn btn-link btn-block" href="/">
-              Check your email !
-            </div>
-          )}
         </main>
       </div>
     </div>
