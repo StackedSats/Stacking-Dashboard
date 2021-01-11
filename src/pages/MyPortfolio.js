@@ -25,8 +25,8 @@ import { DummyGraph, DummyGraph2, Explorer } from "../icons";
 import { userSession, getPerson, getUserData } from "../scripts/auth";
 import { useSelector } from "react-redux";
 import delegateSTX from "../delegation/1.delegatestx";
-
 import "../assets/css/tippy.css";
+import { Right } from "../components/right";
 
 import { Tooltip } from "react-tippy";
 
@@ -61,24 +61,7 @@ const Left = () => {
   return (
     <>
       <h1 className="mb-3 text-2xl">My Portfolio</h1>
-      <div>Dec 20, 2020 01:38</div>
-    </>
-  );
-};
-
-const Right = () => {
-  return (
-    <>
-      <div className="text-gray-300 ">
-        <p className="mb-2">Total Volume</p>
-        <div>
-          <b className="mr-2 text-3xl font-normal text-white">253,548 STX</b>{" "}
-          <span>
-            <span className="text-yellow-500">3.25</span> BTC |{" "}
-            <span className="text-green-600">245,635</span> USD
-          </span>
-        </div>
-      </div>
+      <div>{new Date().toLocaleDateString()}</div>
     </>
   );
 };

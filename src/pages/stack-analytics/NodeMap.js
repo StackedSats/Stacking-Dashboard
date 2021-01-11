@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import {
@@ -14,6 +14,7 @@ import {
 import { TabGroup } from "@statikly/funk";
 
 import map from "../../assets/img/graph-map.svg";
+import axios from "axios";
 
 const Left = () => {
   return (
@@ -46,6 +47,13 @@ const Right = () => {
   );
 };
 function Blank() {
+  useEffect(() => {
+    const fetch = async () => {
+      const data = await axios.get("https://stx-node-map.talhabulut.com/nodes");
+      console.log(data.data.nodes);
+    };
+    fetch();
+  });
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>

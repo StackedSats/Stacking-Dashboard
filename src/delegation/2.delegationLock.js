@@ -14,7 +14,7 @@ export default async function delegationLock({
   htLockPeriod,
   amountustx,
 }) {
-  const { hashMode, data } = decodeBtcAddress(poxAddr);
+  const { hashMode, data } = decodeBtcAddress(poxaddr);
   const hashModeBuffer = bufferCV(new BN(hashMode, 10).toBuffer());
   const hashbytes = bufferCV(data);
   const poxAddressCV = tupleCV({

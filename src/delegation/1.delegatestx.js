@@ -7,7 +7,7 @@ import { decodeBtcAddress } from "./utils";
 async function delegateSTX({ poxAddr, amountSTX, delegateToo }) {
   const { hashMode, data } = decodeBtcAddress(poxAddr);
   console.log(hashMode, data, poxAddr);
-  const hashModeBuffer = bufferCV(new BN(hashMode, 10).toBuffer());
+  const hashModeBuffer = bufferCV(new BN(hashMode.toString(), 10).toBuffer());
   const hashbytes = bufferCV(data);
   const poxAddressCV = tupleCV({
     hashbytes,

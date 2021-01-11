@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import PageTitle from "../../components/Typography/PageTitle";
 
@@ -14,7 +14,7 @@ import {
   TableContainer,
 } from "@windmill/react-ui";
 import { FiDownload } from "react-icons/fi";
-
+import axios from "axios";
 import tc from "../../assets/img/graph-fn-calls.svg";
 import tf from "../../assets/img/graph-transaction-fees.png";
 
@@ -32,6 +32,16 @@ const Right = () => {
 };
 
 function Blank() {
+  const [calls, setCalls] = useState([]);
+  useEffect(() => {
+    const fetch = async () => {
+      const data = await axios.get(
+        `${process.env.REACT_APP_BACKENDURL}/callHistory`
+      );
+      setCalls(data.data);
+    };
+    fetch();
+  }, []);
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>
@@ -67,78 +77,23 @@ function Blank() {
                       </tr>
                     </TableHeader>
                     <TableBody className="text-lg divide-gray-500">
-                      <TableRow className="text-white">
-                        <TableCell>foo</TableCell>
-                        <TableCell>
-                          KsdfkjkfjsJDFhdaskjhsH..56542246.formate.name
-                        </TableCell>
-                        <TableCell>300 STX</TableCell>
-                        <TableCell>5 min. ago</TableCell>
-                      </TableRow>
-                      <TableRow className="text-white">
-                        <TableCell>bar</TableCell>
-                        <TableCell>
-                          KsdfkjkfjsJDFhdaskjhsH..56542246.formate.name
-                        </TableCell>
-                        <TableCell>300 STX</TableCell>
-                        <TableCell>5 min. ago</TableCell>
-                      </TableRow>
-                      <TableRow className="text-white">
-                        <TableCell>foo</TableCell>
-                        <TableCell>
-                          KsdfkjkfjsJDFhdaskjhsH..56542246.formate.name
-                        </TableCell>
-                        <TableCell>300 STX</TableCell>
-                        <TableCell>5 min. ago</TableCell>
-                      </TableRow>
-                      <TableRow className="text-white">
-                        <TableCell>bar</TableCell>
-                        <TableCell>
-                          KsdfkjkfjsJDFhdaskjhsH..56542246.formate.name
-                        </TableCell>
-                        <TableCell>300 STX</TableCell>
-                        <TableCell>5 min. ago</TableCell>
-                      </TableRow>
-                      <TableRow className="text-white">
-                        <TableCell>foo</TableCell>
-                        <TableCell>
-                          KsdfkjkfjsJDFhdaskjhsH..56542246.formate.name
-                        </TableCell>
-                        <TableCell>300 STX</TableCell>
-                        <TableCell>5 min. ago</TableCell>
-                      </TableRow>
-                      <TableRow className="text-white">
-                        <TableCell>bar</TableCell>
-                        <TableCell>
-                          KsdfkjkfjsJDFhdaskjhsH..56542246.formate.name
-                        </TableCell>
-                        <TableCell>300 STX</TableCell>
-                        <TableCell>5 min. ago</TableCell>
-                      </TableRow>
-                      <TableRow className="text-white">
-                        <TableCell>foo</TableCell>
-                        <TableCell>
-                          KsdfkjkfjsJDFhdaskjhsH..56542246.formate.name
-                        </TableCell>
-                        <TableCell>300 STX</TableCell>
-                        <TableCell>5 min. ago</TableCell>
-                      </TableRow>
-                      <TableRow className="text-white">
-                        <TableCell>foo</TableCell>
-                        <TableCell>
-                          KsdfkjkfjsJDFhdaskjhsH..56542246.formate.name
-                        </TableCell>
-                        <TableCell>300 STX</TableCell>
-                        <TableCell>5 min. ago</TableCell>
-                      </TableRow>
-                      <TableRow className="text-white">
-                        <TableCell>foo</TableCell>
-                        <TableCell>
-                          KsdfkjkfjsJDFhdaskjhsH..56542246.formate.name
-                        </TableCell>
-                        <TableCell>300 STX</TableCell>
-                        <TableCell>5 min. ago</TableCell>
-                      </TableRow>
+                      {calls.map((value, index) => {
+                        return (
+                          <TableRow className="text-white" key={index}>
+                            <TableCell>{value.functionName}</TableCell>
+                            <TableCell>{value.stxAddress}</TableCell>
+                            <TableCell>{value.fee} STX</TableCell>
+                            <TableCell>
+                              {parseInt(
+                                (Date.now() - new Date(value.date)) /
+                                  (1000 * 60 * 24),
+                                10
+                              )}{" "}
+                              min. ago
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                     </TableBody>
                   </Table>
                 </TableContainer>
