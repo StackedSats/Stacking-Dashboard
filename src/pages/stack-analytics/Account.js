@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import {
@@ -13,6 +13,12 @@ import {
   TableContainer,
 } from "@windmill/react-ui";
 import { TabGroup } from "@statikly/funk";
+import axios from "axios";
+import { getPerson } from "../../scripts/auth";
+import { useHistory } from "react-router-dom";
+import { UPDATETX } from "../../redux/reducers";
+import { useSelector, useDispatch } from "react-redux";
+import { Right } from "../../components/right";
 
 const Left = () => {
   return (
@@ -23,29 +29,50 @@ const Left = () => {
   );
 };
 
-const Right = () => {
-  return (
-    <>
-      <div className="flex justify-between">
-        <div className="pr-6 mr-6 text-gray-300 border-r border-gray-400">
-          <p className="mb-1">Total STX in circulation</p>
-          <div className="text-xl font-medium text-success-400">
-            4,647,916,016 XTZ
-          </div>
-          <div>$0.016</div>
-        </div>
-        <div>
-          <p className="mb-1">Circulation with</p>
-          <div className="text-xl text-white">
-            <b>34000</b> Wallet
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+// const Right = () => {
+//   return (
+//     <>
+//       <div className="flex justify-between">
+//         <div className="pr-6 mr-6 text-gray-300 border-r border-gray-400">
+//           <p className="mb-1">Total STX in circulation</p>
+//           <div className="text-xl font-medium text-success-400">
+//             4,647,916,016 XTZ
+//           </div>
+//           <div>$0.016</div>
+//         </div>
+//         <div>
+//           <p className="mb-1">Circulation with</p>
+//           <div className="text-xl text-white">
+//             <b>34000</b> Wallet
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
 
 function Blank() {
+  const [date, setDate] = useState([]);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const redirect = (tx) => {
+    console.log(tx);
+    dispatch({ type: UPDATETX, payload: tx });
+    history.push("/app/stack-analytics/transaction");
+  };
+  useEffect(() => {
+    const fetch = async () => {
+      const addr = getPerson();
+      const data = await axios.get(
+        `https://stacks-node-api.blockstack.org/extended/v1/address/${addr._profile.stxAddress}/transactions`
+      );
+      console.log(data);
+      setDate(data.data.results);
+    };
+    fetch();
+  }, []);
+
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>
@@ -66,66 +93,31 @@ function Blank() {
                     </tr>
                   </TableHeader>
                   <TableBody className="text-lg divide-gray-500">
-                    <TableRow className="text-white">
-                      <TableCell>Dec 20, 2020</TableCell>
-                      <TableCell>45,876,958</TableCell>
-                      <TableCell>Ksdfk...Fhda</TableCell>
-                      <TableCell>
-                        <div className="text-white ">465,465,416 STX</div>
-                        <div className="">
-                          <span className="text-warning-500">3.25</span> BTC |{" "}
-                          <span className="text-success-600">245,635</span> USD
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="text-white">
-                      <TableCell>Dec 20, 2020</TableCell>
-                      <TableCell>45,876,958</TableCell>
-                      <TableCell>Ksdfk...Fhda</TableCell>
-                      <TableCell>
-                        <div className="text-white ">465,465,416 STX</div>
-                        <div className="">
-                          <span className="text-warning-500">3.25</span> BTC |{" "}
-                          <span className="text-success-600">245,635</span> USD
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="text-white">
-                      <TableCell>Dec 20, 2020</TableCell>
-                      <TableCell>45,876,958</TableCell>
-                      <TableCell>Ksdfk...Fhda</TableCell>
-                      <TableCell>
-                        <div className="text-white ">465,465,416 STX</div>
-                        <div className="">
-                          <span className="text-warning-500">3.25</span> BTC |{" "}
-                          <span className="text-success-600">245,635</span> USD
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="text-white">
-                      <TableCell>Dec 20, 2020</TableCell>
-                      <TableCell>45,876,958</TableCell>
-                      <TableCell>Ksdfk...Fhda</TableCell>
-                      <TableCell>
-                        <div className="text-white ">465,465,416 STX</div>
-                        <div className="">
-                          <span className="text-warning-500">3.25</span> BTC |{" "}
-                          <span className="text-success-600">245,635</span> USD
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="text-white">
-                      <TableCell>Dec 20, 2020</TableCell>
-                      <TableCell>45,876,958</TableCell>
-                      <TableCell>Ksdfk...Fhda</TableCell>
-                      <TableCell>
-                        <div className="text-white ">465,465,416 STX</div>
-                        <div className="">
-                          <span className="text-warning-500">3.25</span> BTC |{" "}
-                          <span className="text-success-600">245,635</span> USD
-                        </div>
-                      </TableCell>
-                    </TableRow>
+                    {date.map((value, index) => {
+                      return (
+                        <TableRow
+                          className="text-white"
+                          onClick={(e) => redirect(value.tx_id)}
+                        >
+                          <TableCell>
+                            {new Date(
+                              value.burn_block_time
+                            ).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell>{value.block_height}</TableCell>
+                          <TableCell>{value.sender_address}</TableCell>
+                          <TableCell>
+                            <div className="text-white "> STX</div>
+                            <div className="">
+                              <span className="text-warning-500">3.25</span> BTC
+                              |{" "}
+                              <span className="text-success-600">245,635</span>{" "}
+                              USD
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </TableContainer>

@@ -24,8 +24,9 @@ import ContextNav from "../components/ContextNav";
 import { DummyGraph, DummyGraph2, Explorer } from "../icons";
 import { userSession, getPerson, getUserData } from "../scripts/auth";
 import { useSelector } from "react-redux";
-
+import delegateSTX from "../delegation/1.delegatestx";
 import "../assets/css/tippy.css";
+import { Right } from "../components/right";
 
 import { Tooltip } from "react-tippy";
 
@@ -60,24 +61,7 @@ const Left = () => {
   return (
     <>
       <h1 className="mb-3 text-2xl">My Portfolio</h1>
-      <div>Dec 20, 2020 01:38</div>
-    </>
-  );
-};
-
-const Right = () => {
-  return (
-    <>
-      <div className="text-gray-300 ">
-        <p className="mb-2">Total Volume</p>
-        <div>
-          <b className="mr-2 text-3xl font-normal text-white">253,548 STX</b>{" "}
-          <span>
-            <span className="text-yellow-500">3.25</span> BTC |{" "}
-            <span className="text-green-600">245,635</span> USD
-          </span>
-        </div>
-      </div>
+      <div>{new Date().toLocaleDateString()}</div>
     </>
   );
 };
@@ -99,7 +83,7 @@ function MyPortfolio() {
     burnchain_unlock_height: 0,
   });
   const [addressValue, setaddressValue] = useState([]);
-
+  const [stx, setSTX] = useState(0);
   useEffect(() => {
     const data = getPerson();
     console.log(data);
@@ -133,6 +117,15 @@ function MyPortfolio() {
     };
     fetchData();
   }, [state, state.username]);
+
+  const onStack = async () => {
+    const delegateStx = await delegateSTX({
+      poxAddr: "n2VrgRFbKvcesbqerVtJEC8p5Lr2LQKtmB",
+      amountSTX: stx,
+      delegateToo: "ST3K2B2FH1AYXD26WV6YZY4DAA82AZNK967BNB9BK",
+    });
+    console.log(delegateStx);
+  };
 
   return (
     <>
@@ -349,7 +342,7 @@ function MyPortfolio() {
               </div>
               <hr className="border-gray-500" />
               <div className="flex flex-wrap justify-between">
-                <div className="flex flex-wrap items-baseline space-x-2">
+                <div className="flex items-baseline space-x-2">
                   <span className="text-2xl">BTC</span>
                   <span className="text-gray-200">100%</span>
                 </div>
@@ -360,33 +353,38 @@ function MyPortfolio() {
                   <span className="font-medium text-gray-200">BTC</span>
                 </div>
               </div>
-              <div className="flex flex-wrap justify-between mb-3 text-gray-200">
-                <span>2 Addresses</span>
-                <div>
-                  <span className="text-warning-500">3.25</span> BTC |{" "}
-                  <span className="text-success-600">245,635</span> USD
-                  <br></br>
-                  <ul>
-                    {state.btcAddress.map((value, index) => {
-                      return (
-                        <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
-                          <div className="flex flex-wrap justify-between">
-                            <div className="flex flex-wrap items-center space-x-3">
-                              <span>{value}</span>
-                              <ContextNav
-                                menuItems={<MenuItems />}
-                                buttonIcon={<MenuIcon />}
-                              ></ContextNav>
-                            </div>
-                            <div className="flex">
-                              <span>89$</span>
-                            </div>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
+              <div>
+                <div className="flex flex-wrap justify-between mb-3 text-gray-200">
+                  <div className="flex">
+                    <span>2 Addresses</span>
+                  </div>
+                  <div className="flex">
+                    <span>
+                      {prices.stxusd * addressValue.reduce((a, b) => a + b, 0)}
+                    </span>
+                  </div>
                 </div>
+
+                <ul>
+                  {state.btcAddress.map((value, index) => {
+                    return (
+                      <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
+                        <div className="flex flex-wrap justify-between">
+                          <div className="flex flex-wrap items-center space-x-3">
+                            <span>{value}</span>
+                            <ContextNav
+                              menuItems={<MenuItems />}
+                              buttonIcon={<MenuIcon />}
+                            ></ContextNav>
+                          </div>
+                          <div className="flex">
+                            <span>{addressValue[index]}</span>
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </CardBody>
           </Card>
@@ -426,7 +424,14 @@ function MyPortfolio() {
                     <span>Stacking Balance</span>
                   </div>
                   <div className="flex space-x-2">
-                    <span>100 STX</span>
+                    <input
+                      type="number"
+                      value={stx}
+                      onChange={(e) => {
+                        console.log(stx);
+                        setSTX(e.target.value);
+                      }}
+                    ></input>
                   </div>
                 </div>
               </div>
@@ -440,7 +445,10 @@ function MyPortfolio() {
                 </div>
                 <DummyGraph className="w-full"></DummyGraph>
               </div>
-              <button className="mt-4 mb-6 btn btn-outline-primary btn-sm btn-block">
+              <button
+                className="mt-4 mb-6 btn btn-outline-primary btn-sm btn-block"
+                onClick={onStack}
+              >
                 Stack now
               </button>
             </CardBody>

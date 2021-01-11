@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import PageTitle from "../../components/Typography/PageTitle";
 
@@ -17,6 +17,13 @@ import { FiDownload } from "react-icons/fi";
 import { TabGroup } from "@statikly/funk";
 import ts from "../../assets/img/graph-transfer-summary.png";
 import tf from "../../assets/img/graph-transaction-fees.png";
+import { Right } from "../../components/right";
+import axios from "axios";
+import { prices } from "../../redux/reducers";
+import ThemedSuspense from "../../components/ThemedSuspense";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { UPDATETX } from "../../redux/reducers";
 
 const Left = () => {
   return (
@@ -27,24 +34,32 @@ const Left = () => {
   );
 };
 
-const Right = () => {
-  return (
-    <>
-      <div className="text-gray-300 ">
-        <p className="mb-2">Total Volume</p>
-        <div>
-          <b className="mr-2 text-3xl font-normal text-white">253,548 STX</b>{" "}
-          <span>
-            <span className="text-yellow-500">3.25</span> BTC |{" "}
-            <span className="text-green-600">245,635</span> USD
-          </span>
-        </div>
-      </div>
-    </>
-  );
-};
-
 function Blank() {
+  const [list, setList] = useState([]);
+  const prices = useSelector((state) => state.prices);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetch = async () => {
+      const data = await axios.get(
+        "https://stacks-node-api.blockstack.org/extended/v1/address/ST000000000000000000002AMW42H/transactions"
+      );
+      console.log(data.data);
+      setList(data.data.results);
+    };
+    fetch();
+  }, []);
+
+  const redirect = (tx) => {
+    console.log(tx);
+    dispatch({ type: UPDATETX, payload: tx });
+    history.push("/app/stack-analytics/transaction");
+  };
+
+  if (list.length === 0) {
+    return <ThemedSuspense />;
+  }
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>
@@ -79,11 +94,11 @@ function Blank() {
                         <span className="ml-1">Export</span>
                       </div>
                     </div>
-                    <div>
+                    {/* <div>
                       <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
                         <option>Sort By</option>
                       </Select>
-                    </div>
+                    </div> */}
                   </div>
                   <TabGroup.TabPanel
                     index={0}
@@ -103,83 +118,82 @@ function Blank() {
                           </tr>
                         </TableHeader>
                         <TableBody className="text-lg dark:divide-gray-500">
-                          <TableRow>
-                            <TableCell>
-                              <div className="text-lg text-white">Today</div>
-                              <span className="text-sm">09:06:30 GMT</span>
-                            </TableCell>
-                            <TableCell>
-                              <span className="text-white">124,562,546</span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-error-500">Karim</div>
-                              <span>STX1I5ka...68das65</span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-primary-500">Karim</div>
-                              <span>STX1I5ka...68das65</span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="float-right text-white">
-                                +0.016 XTZ
-                              </div>
-                              <div className="float-right text-sm">
-                                <span className="text-warning-500">3.25</span>{" "}
-                                BTC |{" "}
-                                <span className="text-success-600">
-                                  245,635
-                                </span>{" "}
-                                USD
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>
-                              <div className="text-lg text-white">Today</div>
-                              <span className="text-sm">09:06:30 GMT</span>
-                            </TableCell>
-                            <TableCell>
-                              <span className="text-white">124,562,546</span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-error-500">Karim</div>
-                              <span>STX1I5ka...68das65</span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-primary-500">Karim</div>
-                              <span>STX1I5ka...68das65</span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="float-right text-white">
-                                +0.016 XTZ
-                              </div>
-                              <div className="float-right text-sm">
-                                <span className="text-warning-500">3.25</span>{" "}
-                                BTC |{" "}
-                                <span className="text-success-600">
-                                  245,635
-                                </span>{" "}
-                                USD
-                              </div>
-                            </TableCell>
-                          </TableRow>
+                          {list
+                            .filter((value) => {
+                              return value.token_transfer === undefined
+                                ? false
+                                : true;
+                            })
+                            .map((value, index) => {
+                              return (
+                                <TableRow
+                                  key={index}
+                                  onClick={(e) => redirect(value.tx_id)}
+                                >
+                                  <TableCell>
+                                    <div className="text-lg text-white">
+                                      Today
+                                    </div>
+                                    <span className="text-sm">
+                                      {new Date(
+                                        value.burn_block_time_iso
+                                      ).toLocaleDateString()}{" "}
+                                      GMT
+                                    </span>
+                                  </TableCell>
+                                  <TableCell>
+                                    <span className="text-white">
+                                      {value.block_height}
+                                    </span>
+                                  </TableCell>
+                                  <TableCell>
+                                    {/* <div className="text-error-500">Karim</div> */}
+                                    <span>{value.sender_address}</span>
+                                  </TableCell>
+                                  <TableCell>
+                                    {/* <div className="text-primary-500">Karim</div> */}
+                                    <span>
+                                      {value.token_transfer.recipient_address}
+                                    </span>
+                                  </TableCell>
+                                  <TableCell>
+                                    <div className="float-right text-white">
+                                      {value.token_transfer.amount} STX
+                                    </div>
+                                    <div className="float-right text-sm">
+                                      <span className="text-warning-500">
+                                        {(value.token_transfer.amount *
+                                          prices.stxusd) /
+                                          prices.btcusd}
+                                      </span>{" "}
+                                      BTC |{" "}
+                                      <span className="text-success-600">
+                                        {value.token_transfer.amount *
+                                          prices.stxusd}
+                                      </span>{" "}
+                                      USD
+                                    </div>
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
                         </TableBody>
                       </Table>
                     </TableContainer>
                   </TabGroup.TabPanel>
-                  <TabGroup.TabPanel
+                  {/* <TabGroup.TabPanel
                     index={1}
                     className="flex flex-col py-10 text-gray-500 transition-all transform dark:text-gray-200"
                     activeClassName="opacity-100 duration-500 translate-x-0"
                     inactiveClassName="absolute opacity-0 -translate-x-2"
                   >
                     Largest Transfers
-                  </TabGroup.TabPanel>
+                  </TabGroup.TabPanel> */}
                 </TabGroup>
               </CardBody>
             </Card>
           </div>
-          <div className="space-y-6">
+          {/* <div className="space-y-6">
             <Card>
               <CardBody className="-mb-8 space-y-8 text-white">
                 <div className="flex flex-wrap justify-between">
@@ -214,7 +228,7 @@ function Blank() {
                 <img className="align-middle" src={tf} alt="" />
               </CardBody>
             </Card>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

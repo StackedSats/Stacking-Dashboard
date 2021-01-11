@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { VscArrowSmallRight } from "react-icons/vsc";
 import { FiCopy } from "react-icons/fi";
 import { userSession } from "../scripts/auth";
+import { useHistory } from "react-router-dom";
 /* -------------------------------------------------------------------------- */
 /*    Avatar - Displays Avatar or placeholder if the avatar does not exist    */
 /* -------------------------------------------------------------------------- */
@@ -15,9 +16,6 @@ import UserImage from "../assets/img/avatar-0.jpg";
 import AvatarPlaceholder from "react-avatar";
 import axios from "axios";
 
-const logout = () => {
-  axios.delete(`process.env.REACT_APP_BACKENDURL/logout`);
-};
 const hasAvatar = false;
 
 /* -------------------------------------------------------------------------- */
@@ -28,9 +26,16 @@ function Header() {
   const user = useSelector((state) => state.user);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
+  const history = useHistory();
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   }
+
+  const logout = () => {
+    axios.delete(`${process.env.REACT_APP_BACKENDURL}/logout`).then(() => {
+      history.push("/login");
+    });
+  };
 
   return (
     <header className="z-40 h-16 shadow-bottom bg-primary-500">

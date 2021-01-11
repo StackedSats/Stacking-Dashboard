@@ -3,6 +3,7 @@ import { combineReducers } from "redux";
 export const STXTotalVolume = "STXTotalVolume";
 export const userDetails = "userDetails";
 export const PRICES = "prices";
+export const UPDATETX = "updatetx";
 
 export const updateVolume = (
   state = { STXTotalVolume: "Please Sign In" },
@@ -45,4 +46,13 @@ export const prices = (state = stateValues, action) => {
   }
 };
 
-export const reducer = combineReducers({ updateVolume, user, prices });
+export const txid = (state = "", action) => {
+  switch (action.type) {
+    case UPDATETX:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+export const reducer = combineReducers({ updateVolume, user, prices, txid });

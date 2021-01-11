@@ -1,22 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-
+import Joi from "joi";
 import { Label, Input } from "@windmill/react-ui";
 import { FiArrowRight } from "react-icons/fi";
 import axios from "axios";
 
+const schema = Joi.object({
+  username: Joi.string().email({ tlds: { allow: false } }),
+});
 function Login() {
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isError, setError] = useState("");
 
   const register = async () => {
-    const token = await axios.post(
-      `${process.env.REACT_APP_BACKENDURL}/register`,
-      { username, password }
-    );
-    localStorage.setItem("stacksauth", token);
-    history.push("/login");
+    const { error } = schema.validate(username);
+    if (!error) {
+      const token = await axios.post(
+        `${process.env.REACT_APP_BACKENDURL}/register`,
+        { username, password }
+      );
+      localStorage.setItem("stacksauth", token);
+      history.push("/login");
+    } else {
+      setError(true);
+    }
   };
 
   return (
@@ -38,7 +47,9 @@ function Login() {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </Label>
-
+            {isError && (
+              <p style={{ color: "red" }}>Please Enter a Valid Email</p>
+            )}
             <Label className="mt-4">
               <span>Password</span>
               <Input

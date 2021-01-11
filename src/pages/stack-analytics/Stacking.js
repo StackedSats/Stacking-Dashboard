@@ -18,10 +18,11 @@ import {
 } from "@windmill/react-ui";
 
 import { TabGroup } from "@statikly/funk";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FiSearch } from "react-icons/fi";
 
 import tf from "../../assets/img/graph-transaction-fees.png";
+import { Right } from "../../components/right";
 import axios from "axios";
 
 const Left = () => {
@@ -33,43 +34,27 @@ const Left = () => {
   );
 };
 
-const Right = () => {
-  return (
-    <>
-      <div className="flex items-center text-gray-300">
-        <div className="mr-2">
-          <p className="mb-2">Total Volume</p>
-          <div>
-            <b className="mr-2 text-3xl font-normal text-white">253,548 STX</b>{" "}
-            <span>
-              <span className="text-yellow-500">3.25</span> BTC |{" "}
-              <span className="text-green-600">245,635</span> USD
-            </span>
-          </div>
-        </div>
-        <div className="px-6">
-          <h4 className="mb-2">Next Reward Cycle</h4>
-          <CountdownTimer stakingDuration="24" endDate="01/08/2021 11:13:01" />
-        </div>
-      </div>
-    </>
-  );
-};
-
 function Blank() {
   const [txs, setTxs] = useState([]);
+  const [cycle, setCycle] = useState({});
   const prices = useSelector((state) => state.prices);
+
   useEffect(() => {
     const fetch = async () => {
       const data = await axios.get(
         `${process.env.REACT_APP_BACKENDURL}/rewardHistory`
       );
-      console.log(data);
       setTxs(data.data);
+      const cycle = await axios.get(
+        `${process.env.REACT_APP_BACKENDURL}/cycleInfo`
+      );
+      setCycle(cycle);
+      console.log(cycle.data);
     };
 
     fetch();
   }, []);
+
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>
