@@ -9,7 +9,7 @@ function ForgotPassword() {
   const [message, setMessage] = useState(false);
 
   const sendEmail = async () => {
-    await axios.post(`${process.env.REACT_APP_BACKENDURL}/forgotPassward`, {
+    await axios.post(`${process.env.REACT_APP_BACKENDURL}/forgotPassword`, {
       username,
     });
     setMessage(true);
@@ -50,9 +50,9 @@ function ForgotPassword() {
           </div>
 
           {message && (
-            <a className="mt-4 text-gray-200 btn btn-link btn-block" href="/">
+            <div className="mt-4 text-gray-200 btn btn-link btn-block" href="/">
               Check your email !
-            </a>
+            </div>
           )}
         </main>
       </div>
