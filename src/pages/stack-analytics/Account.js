@@ -24,7 +24,7 @@ const Left = () => {
   return (
     <>
       <h1 className="mb-3 text-2xl">Account</h1>
-      <div>KsdfkjkfjsJDFhdaskjhsH56542246.formate.name</div>
+      <div>ST000000000000000000002AMW42H.pox</div>
     </>
   );
 };

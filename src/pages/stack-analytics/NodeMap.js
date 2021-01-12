@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import {
@@ -15,6 +15,15 @@ import { TabGroup } from "@statikly/funk";
 
 import map from "../../assets/img/graph-map.svg";
 import axios from "axios";
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  Marker,
+} from "react-simple-maps";
+
+const geoUrl =
+  "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
 const Left = () => {
   return (
@@ -47,13 +56,52 @@ const Right = () => {
   );
 };
 function Blank() {
+  const [coordinates, setCoordinates] = useState([{ lon: "", lat: "" }]);
+  const [count, setCount] = useState(0);
+  const [key, setFinalKey] = useState({});
+
   useEffect(() => {
     const fetch = async () => {
-      const data = await axios.get("https://stx-node-map.talhabulut.com/nodes");
-      console.log(data.data.nodes);
+      let data = await axios.get("https://stx-node-map.talhabulut.com/nodes");
+      let count = 0;
+      let list = [];
+
+      let max = 0;
+      let finalKey = "";
+
+      data.data.nodes
+        .filter((value) => {
+          if (value.location !== undefined) {
+            if (list[value.location.country]) {
+              list[value.location.country] += 1;
+            } else {
+              list[value.location.country] = 1;
+            }
+            return true;
+          } else {
+            count++;
+            return false;
+          }
+        })
+        .map((value) => {
+          list.push([value.location.lng, value.location.lat]);
+          return { lon: value.location.lng, lat: value.location.lat };
+        });
+
+      console.log(list);
+      Object.keys(list).forEach((key) => {
+        if (list[key] > max) {
+          max = list[key];
+          finalKey = key;
+        }
+      });
+
+      setFinalKey({ finalKey, max });
+      setCoordinates(list);
+      setCount(count);
     };
     fetch();
-  });
+  }, []);
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>
@@ -87,11 +135,24 @@ function Blank() {
               >
                 <div className="grid grid-cols-1 gap-16 mb-8 xl:grid-cols-3">
                   <div className="col-span-2">
-                    <img className="w-full" src={map} alt="" />
+                    <ComposableMap>
+                      <Geographies geography={geoUrl}>
+                        {({ geographies }) =>
+                          geographies.map((geo) => (
+                            <Geography key={geo.rsmKey} geography={geo} />
+                          ))
+                        }
+                      </Geographies>
+                      {coordinates.map((value) => (
+                        <Marker coordinates={value}>
+                          <circle r={2} fill="#F53" />
+                        </Marker>
+                      ))}
+                    </ComposableMap>
                   </div>
                   <div>
                     <div className="mb-6">
-                      <div className="flex flex-wrap items-center justify-between py-2 text-white border-b border-gray-600">
+                      {/* <div className="flex flex-wrap items-center justify-between py-2 text-white border-b border-gray-600">
                         <span className="text-gray-200">
                           Total Transfers (POX) (24h)
                         </span>
@@ -100,17 +161,17 @@ function Blank() {
                       <div className="flex flex-wrap items-center justify-between py-2 text-white border-b border-gray-600">
                         <span className="text-gray-200">POX Winner</span>
                         <span>$89.59</span>
-                      </div>
+                      </div> */}
                       <div className="flex flex-wrap items-center justify-between py-2 text-white border-b border-gray-600">
                         <span className="text-gray-200">
                           Most Blocks:{" "}
-                          <span className="text-white">Turkey</span>
+                          <span className="text-white">{key.finalKey}</span>
                         </span>
-                        <span>447 (31%)</span>
+                        <span>{key.max}</span>
                       </div>
                       <div className="flex flex-wrap items-center justify-between py-2 text-white border-b border-gray-600">
                         <span className="text-gray-200">Unknown Location</span>
-                        <span>147</span>
+                        <span>{count}</span>
                       </div>
                     </div>
                     <h2 className="text-xl text-white">Largest Nodes</h2>
@@ -147,7 +208,7 @@ function Blank() {
         </Card>
         <Card>
           <CardBody>
-            <TabGroup numTabs={3} direction={TabGroup.direction.HORIZONTAL}>
+            {/* <TabGroup numTabs={3} direction={TabGroup.direction.HORIZONTAL}>
               <TabGroup.TabList>
                 <TabGroup.Tab
                   index={0}
@@ -353,7 +414,7 @@ function Blank() {
               >
                 Block
               </TabGroup.TabPanel>
-            </TabGroup>
+            </TabGroup> */}
           </CardBody>
         </Card>
       </div>

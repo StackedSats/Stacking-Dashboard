@@ -6,11 +6,17 @@ import { FiArrowRight } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { userDetails } from "../redux/reducers";
 import { useHistory } from "react-router-dom";
+import joi from "joi";
+
+const loginSchema = joi.object({
+  username: joi.string().email({ tlds: { allow: false } }),
+});
 
 function Login() {
   let history = useHistory();
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
+  const [error, setError] = useState(false);
   const dispatch = useDispatch();
 
   const changeName = (e) => {
@@ -21,16 +27,25 @@ function Login() {
     setpassword(e.target.value);
   };
   const login = async () => {
-    console.log(process.env);
-    const loggingIn = await axios({
-      url: `${process.env.REACT_APP_BACKENDURL}/login`,
-      data: { username, password },
-      method: "post",
-    });
-    console.log(loggingIn);
-    localStorage.setItem("auth", loggingIn.data.token);
-    dispatch({ type: userDetails, payload: loggingIn.data.user });
-    history.push("/app/network");
+    setError(false);
+    const { error } = loginSchema.validate({ username });
+    if (error) {
+      setError(true);
+    } else {
+      const loggingIn = await axios({
+        url: `${process.env.REACT_APP_BACKENDURL}/login`,
+        data: { username, password },
+        method: "post",
+      });
+
+      if (loggingIn.status === 200) {
+        localStorage.setItem("auth", loggingIn.data.token);
+        dispatch({ type: userDetails, payload: loggingIn.data.user });
+        history.push("/app/network");
+      } else {
+        setError(true);
+      }
+    }
   };
   return (
     <div className="flex items-center min-h-screen p-6 bg-gray-900">
@@ -71,7 +86,7 @@ function Login() {
             >
               Log in
             </div>
-
+            {error && <p style={{ color: "red" }}>Invalid Email or Password</p>}
             <p className="mt-4">
               <Link
                 className="font-medium text-gray-300 hover:underline"

@@ -1,6 +1,14 @@
 import React from "react";
 
-function Chart({ children, title }) {
+function Chart({
+  children,
+  title,
+  data = { duration: 0, secondsUntilNextCycle: 0, targetBlock: 0 },
+}) {
+  let division = (data.secondsUntilNextCycle + data.duration) / 6;
+  if (isNaN(division)) {
+    division = 0;
+  }
   return (
     <div
       className="flex-col items-center justify-center"
@@ -79,7 +87,7 @@ function Chart({ children, title }) {
             fill="#2F80ED"
           />
           <text x="25" y="45" fill="white" class="small">
-            302
+            {data.targetBlock}
           </text>
         </svg>
         <div className="flex flex-col w-full">
@@ -113,7 +121,7 @@ function Chart({ children, title }) {
               className="ml-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              302
+              {division * 6}
             </div>
           </div>
         </div>
@@ -123,7 +131,7 @@ function Chart({ children, title }) {
               className="mr-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              12
+              {division * 5}
             </div>
             <svg
               width="26"
@@ -169,7 +177,7 @@ function Chart({ children, title }) {
               className="ml-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              302
+              {division * 4}
             </div>
           </div>
         </div>
@@ -179,7 +187,7 @@ function Chart({ children, title }) {
               className="mr-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              12
+              {division * 3}
             </div>
             <svg
               width="26"
@@ -226,7 +234,7 @@ function Chart({ children, title }) {
               className="ml-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              302
+              {division * 2}
             </div>
           </div>
         </div>
@@ -236,7 +244,7 @@ function Chart({ children, title }) {
               className="mr-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              12
+              {division * 1}
             </div>
             <svg
               width="26"
@@ -322,7 +330,7 @@ function Chart({ children, title }) {
             fill="#84A4B5"
           />
           <text x="25" y="45" fill="white" class="small">
-            302
+            {isNaN(data.targetBlock - 1) ? 0 : data.targetBlock - 1}
           </text>
         </svg>
         <div className="flex flex-col w-full">
@@ -356,7 +364,7 @@ function Chart({ children, title }) {
               className="ml-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              302
+              {division * 6}
             </div>
           </div>
         </div>
@@ -366,7 +374,7 @@ function Chart({ children, title }) {
               className="mr-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              12
+              {division * 5}
             </div>
             <svg
               width="26"
@@ -412,7 +420,7 @@ function Chart({ children, title }) {
               className="ml-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              302
+              {division * 4}
             </div>
           </div>
         </div>
@@ -422,7 +430,7 @@ function Chart({ children, title }) {
               className="mr-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              12
+              {division * 3}
             </div>
             <svg
               width="26"
@@ -469,7 +477,7 @@ function Chart({ children, title }) {
               className="ml-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              302
+              {division * 2}
             </div>
           </div>
         </div>
@@ -479,7 +487,7 @@ function Chart({ children, title }) {
               className="mr-2 text-sm text-center text-gray-300"
               style={{ width: `28px` }}
             >
-              12
+              {division * 1}
             </div>
             <svg
               width="26"
@@ -565,7 +573,7 @@ function Chart({ children, title }) {
             fill="#84A4B5"
           />
           <text x="25" y="45" fill="white" class="small">
-            302
+            {isNaN(data.targetBlock - 2) ? 0 : data.targetBlock - 2}
           </text>
         </svg>
       </div>

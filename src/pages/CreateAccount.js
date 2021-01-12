@@ -15,7 +15,9 @@ function Login() {
   const [isError, setError] = useState("");
 
   const register = async () => {
-    const { error } = schema.validate(username);
+    console.log("fsjkdhnf");
+    const { error } = schema.validate({ username });
+    console.log(error);
     if (!error) {
       const token = await axios.post(
         `${process.env.REACT_APP_BACKENDURL}/register`,

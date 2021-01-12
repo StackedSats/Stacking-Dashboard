@@ -5,7 +5,7 @@ import { Avatar, Input, Dropdown } from "@windmill/react-ui";
 import { useSelector } from "react-redux";
 import { VscArrowSmallRight } from "react-icons/vsc";
 import { FiCopy } from "react-icons/fi";
-import { userSession } from "../scripts/auth";
+import { userSession, getPerson } from "../scripts/auth";
 import { useHistory } from "react-router-dom";
 /* -------------------------------------------------------------------------- */
 /*    Avatar - Displays Avatar or placeholder if the avatar does not exist    */
@@ -22,6 +22,9 @@ const hasAvatar = false;
 /*                              Header Component                              */
 /* -------------------------------------------------------------------------- */
 function Header() {
+  const userAddress = userSession.isUserSignedIn()
+    ? getPerson()._profile.stxAddress
+    : "";
   const { toggleSidebar } = useContext(SidebarContext);
   const user = useSelector((state) => state.user);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -110,7 +113,7 @@ function Header() {
                 {user.username}
               </h2>
               <div className="flex items-center justify-center mt-4 mb-8">
-                <span className="mr-4">{user.stxAddress[0]}</span>
+                <span className="mr-4">{userAddress}</span>
                 <FiCopy className="w-4 h-4" />
               </div>
               <button className="btn btn-primary">Become a STX Miner</button>

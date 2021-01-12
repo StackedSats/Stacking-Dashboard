@@ -17,12 +17,16 @@ import { FiDownload } from "react-icons/fi";
 import axios from "axios";
 import tc from "../../assets/img/graph-fn-calls.svg";
 import tf from "../../assets/img/graph-transaction-fees.png";
+import ChartCard from "../../components/Chart/ChartCard";
+
+import { Doughnut, Line, Pie } from "react-chartjs-2";
+import ChartLegend from "../../components/Chart/ChartLegend";
 
 const Left = () => {
   return (
     <>
       <h1 className="mb-3 text-2xl">Contract Detail</h1>
-      <div>KsdfkjkfjsJDFhdaskjhsH56542246.formate.name</div>
+      <div>ST000000000000000000002AMW42H.pox</div>
     </>
   );
 };
@@ -33,15 +37,113 @@ const Right = () => {
 
 function Blank() {
   const [calls, setCalls] = useState([]);
+  const [fees, setFees] = useState([]);
+  const [dateAgainsFee, setDateAgainstFee] = useState([]);
+  const [pieLIst, setPieList] = useState({});
+
   useEffect(() => {
     const fetch = async () => {
       const data = await axios.get(
         `${process.env.REACT_APP_BACKENDURL}/callHistory`
       );
       setCalls(data.data);
+      let list = {};
+      let fees = [];
+      let dateAgainsFee = [];
+      data.data.forEach((value) => {
+        fees.push(value.fee);
+
+        dateAgainsFee.push(new Date(value.date).getTime());
+        if (list[value.functionName]) {
+          list[value.functionName] += list[value.functionName];
+        } else {
+          list[value.functionName] = 1;
+        }
+      });
+      setFees(fees);
+      setDateAgainstFee(dateAgainsFee);
+
+      let pieList = { sum: [], functionName: [] };
+      Object.keys(list).forEach((key) => {
+        pieList.sum.push(list[key]);
+        pieList.functionName.push(key);
+      });
+
+      setPieList(pieList);
     };
     fetch();
   }, []);
+
+  const data = {
+    labels: pieLIst.functionName,
+    datasets: [
+      {
+        label: "# of Votes",
+        data: pieLIst.sum,
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const lineOptions = {
+    data: {
+      labels: dateAgainsFee,
+      datasets: [
+        {
+          label: "Fees",
+          backgroundColor: "#0694a2",
+          borderColor: "#0694a2",
+          data: fees,
+          fill: true,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      tooltips: {
+        mode: "index",
+        intersect: false,
+      },
+      hover: {
+        mode: "nearest",
+        intersect: true,
+      },
+      scales: {
+        x: {
+          display: true,
+        },
+        y: {
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: "Value",
+          },
+        },
+      },
+    },
+    legend: {
+      display: false,
+    },
+  };
+
+  const lineLegends = [{ title: "Fees", color: "bg-teal-600" }];
+
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>
@@ -119,13 +221,18 @@ function Blank() {
                     <div className="flex font-medium text-success-500">200</div>
                   </div>
                 </div>
-                <img className="w-full align-middle" src={tc} alt="" />
+                <ChartCard title="">
+                  <Pie data={data} />
+                </ChartCard>
               </CardBody>
             </Card>
             <Card>
               <CardBody className="-mb-8 space-y-8 text-white">
                 <h2 className="mr-3 text-xl font-medium">Transaction fees</h2>
-                <img className="align-middle" src={tf} alt="" />
+                <ChartCard title="Doughnut">
+                  <Line {...lineOptions} />
+                  <ChartLegend legends={lineLegends} />
+                </ChartCard>
               </CardBody>
             </Card>
           </div>

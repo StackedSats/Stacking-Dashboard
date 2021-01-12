@@ -48,7 +48,7 @@ function Blank() {
       const cycle = await axios.get(
         `${process.env.REACT_APP_BACKENDURL}/cycleInfo`
       );
-      setCycle(cycle);
+      setCycle(cycle.data);
       console.log(cycle.data);
     };
 
@@ -66,7 +66,7 @@ function Blank() {
               <div>
                 <h3 className="mb-10 text-2xl font-medium">Previous Cycles</h3>
                 <div className="flex justify-center">
-                  <PreviousCycles></PreviousCycles>
+                  <PreviousCycles data={cycle}></PreviousCycles>
                 </div>
               </div>
               <div className="col-span-4">

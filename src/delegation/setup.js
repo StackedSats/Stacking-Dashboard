@@ -1,13 +1,15 @@
 import { InfoApi } from "@stacks/blockchain-api-client";
-const btc = require("bitcoinjs-lib");
+// const btc = require("bitcoinjs-lib");
+import { StackingClient } from "@stacks/stacking";
+import { StacksTestnet } from "@stacks/network";
+import { getPerson } from "../scripts/auth";
 
-const btcAddress = (addr) =>
-  "0x" +
-  btc.address
-    .fromBase58Check("1C56LYirKa3PFXFsvhSESgDy2acEHVAEt6")
-    .hash.toString("hex");
+const client = new StackingClient(
+  getPerson()._profile.stxAddress,
+  new StacksTestnet()
+);
 
-export { btcAddress };
+export { client };
 
 async function abc() {
   const infoApi = new InfoApi();

@@ -1,22 +1,31 @@
-import { openContractCall } from "@blockstack/connect";
+import { openContractCall } from "@stacks/connect";
+import {
+  bufferCV,
+  uintCV,
+  tupleCV,
+  standardPrincipalCV,
+} from "@stacks/transactions";
+import BN from "bn.js";
 import logo from "../icons/logo.svg";
-import btcAddress from "./setup";
+import { decodeBtcAddress } from "./utils";
+import buffer from "buffer";
+const Buffer = buffer.Buffer;
 
 async function delegateStx(delegateTo, poxAddr, rewardCycle) {
+  const { hashMode, data } = decodeBtcAddress(poxAddr);
+  const hashModeBuffer = bufferCV(new BN(hashMode, 10).toArrayLike(Buffer));
+  const hashbytes = bufferCV(data);
+  console.log(hashbytes, hashModeBuffer);
+  const poxAddressCV = tupleCV({
+    hashbytes,
+    version: hashModeBuffer,
+  });
+
   const options = {
     contractAddress: "ST000000000000000000002AMW42H",
     contractName: "pox",
     functionName: "stack-aggregation-commit",
-    functionArgs: [
-      {
-        type: "buff",
-        value: btcAddress(poxAddr),
-      },
-      {
-        type: "uint",
-        value: rewardCycle,
-      },
-    ],
+    functionArgs: [poxAddressCV, uintCV(rewardCycle)],
     appDetails: {
       name: "StakedStats",
       icon: logo,

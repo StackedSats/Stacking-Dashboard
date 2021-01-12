@@ -22,10 +22,16 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 
+import ChartCard from "../components/Chart/ChartCard";
+import { Doughnut, Line, Bar } from "react-chartjs-2";
+import ChartLegend from "../components/Chart/ChartLegend";
+
+import { userDetails } from "../redux/reducers";
+
 import ContextNav from "../components/ContextNav";
-import { DummyGraph, DummyGraph2, Explorer } from "../icons";
+import { DummyGraph2, Explorer } from "../icons";
 import { userSession, getPerson, getUserData } from "../scripts/auth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import delegateSTX from "../delegation/1.delegatestx";
 import "../assets/css/tippy.css";
 import { Right } from "../components/right";
@@ -44,10 +50,30 @@ const MenuIcon = () => {
   );
 };
 
-const MenuItems = () => {
+const MenuItems = ({ stx, btc, username }) => {
+  const dispatch = useDispatch();
+
+  const deleteAddress = async () => {
+    console.log(username, stx, btc);
+    const makeTheCal = await axios({
+      method: "delete",
+      url: `${process.env.REACT_APP_BACKENDURL}/addresses`,
+      data: {
+        username: username,
+        stxAddress: stx,
+        btcAddress: btc,
+      },
+    });
+    console.log(makeTheCal);
+    dispatch({ payload: makeTheCal.data, type: userDetails });
+  };
+
   return (
     <>
-      <li className="flex items-center text-sm leading-8 text-gray-200 cursor-pointer hover:text-white">
+      <li
+        className="flex items-center text-sm leading-8 text-gray-200 cursor-pointer hover:text-white"
+        onClick={deleteAddress}
+      >
         <FiTrash2 className="mr-2 wh-3" />
         <span>Delete</span>
       </li>
@@ -58,6 +84,57 @@ const MenuItems = () => {
     </>
   );
 };
+
+export const lineOptions = {
+  data: {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [
+      {
+        label: "Organic",
+        /**
+         * These colors come from Tailwind CSS palette
+         * https://tailwindcss.com/docs/customizing-colors/#default-color-palette
+         */
+        backgroundColor: "#0694a2",
+        borderColor: "#0694a2",
+        data: [43, 48, 40, 54, 67, 73, 70],
+        fill: true,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    tooltips: {
+      mode: "index",
+      intersect: false,
+    },
+    hover: {
+      mode: "nearest",
+      intersect: true,
+    },
+    scales: {
+      x: {
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: "Month",
+        },
+      },
+      y: {
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: "Value",
+        },
+      },
+    },
+  },
+  legend: {
+    display: false,
+  },
+};
+
+export const lineLegends = [{ title: "Organic", color: "bg-teal-600" }];
 
 const Left = () => {
   return (
@@ -120,19 +197,11 @@ function MyPortfolio() {
       }
 
       setaddressValue(vs);
-      setTxs(values.data.txs);
+      console.log(values.data.txs);
+      if (values.data.txs) setTxs(values.data.txs);
     };
     fetchData();
   }, [state, state.username]);
-
-  const onStack = async () => {
-    const delegateStx = await delegateSTX({
-      poxAddr: "n2VrgRFbKvcesbqerVtJEC8p5Lr2LQKtmB",
-      amountSTX: stx,
-      delegateToo: "ST3K2B2FH1AYXD26WV6YZY4DAA82AZNK967BNB9BK",
-    });
-    console.log(delegateStx);
-  };
 
   const addAddress = async () => {
     const makeTheCal = await axios({
@@ -146,16 +215,13 @@ function MyPortfolio() {
     console.log(makeTheCal);
   };
 
-  const deleteAddress = async () => {
-    const makeTheCal = await axios({
-      url: `${process.env.REACT_APP_BACKENDURL}/addresses}`,
-      data: {
-        username: state.username,
-        stxAddress: wallet._profile.stxAddress,
-        btcAddress,
-      },
+  const onStack = async () => {
+    const delegateStx = await delegateSTX({
+      poxAddr: "n2VrgRFbKvcesbqerVtJEC8p5Lr2LQKtmB",
+      amountSTX: stx,
+      delegateToo: "ST3K2B2FH1AYXD26WV6YZY4DAA82AZNK967BNB9BK",
+      burnHt: 3,
     });
-    console.log(makeTheCal);
   };
 
   return (
@@ -240,69 +306,70 @@ function MyPortfolio() {
                       </tr>
                     </TableHeader>
                     <TableBody className="text-lg divide-gray-500">
-                      {txs.map((value, index) => {
-                        return (
-                          <TableRow>
-                            <TableCell>
-                              <div className="text-lg text-white">
-                                {value.date}
-                              </div>
-                              <span className="text-sm">{value.date}</span>
-                            </TableCell>
-                            <TableCell>
-                              <span className="text-white btn btn-outline-gray btn-xs">
-                                Testnet
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-sm text-white">
-                                Stackedsats
-                              </div>
-                              <span>{value.from}</span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-sm text-white">
-                                {value.to}
-                              </div>
-                              <div className="flex items-center text-sm text-warning-500">
-                                <FiArrowRight />
-                                <span className="ml-1">Bitcoin</span>
-                              </div>
-                              {/* <div className="flex items-center text-sm text-primary-400">
+                      {txs.length > 0 &&
+                        txs.map((value, index) => {
+                          return (
+                            <TableRow>
+                              <TableCell>
+                                <div className="text-lg text-white">
+                                  {value.date}
+                                </div>
+                                <span className="text-sm">{value.date}</span>
+                              </TableCell>
+                              <TableCell>
+                                <span className="text-white btn btn-outline-gray btn-xs">
+                                  Testnet
+                                </span>
+                              </TableCell>
+                              <TableCell>
+                                <div className="text-sm text-white">
+                                  Stackedsats
+                                </div>
+                                <span>{value.from}</span>
+                              </TableCell>
+                              <TableCell>
+                                <div className="text-sm text-white">
+                                  {value.to}
+                                </div>
+                                <div className="flex items-center text-sm text-warning-500">
+                                  <FiArrowRight />
+                                  <span className="ml-1">Bitcoin</span>
+                                </div>
+                                {/* <div className="flex items-center text-sm text-primary-400">
                                 <FiArrowRight />
                                 <span className="ml-1">Stacks</span>
                               </div> */}
-                            </TableCell>
-                            <TableCell>
-                              <div className="text-sm text-white">
-                                {value.reward} STX
-                              </div>
-                              <div className="text-sm">
-                                <span className="text-warning-500">
-                                  {parseFloat(
-                                    value.reward /
-                                      (prices.stxusd * prices.btcusd)
-                                  ).toFixed(2)}
-                                </span>{" "}
-                                BTC |{" "}
-                                <span className="text-success-600">
-                                  {parseFloat(
-                                    prices.stxusd / value.reward
-                                  ).toFixed(2)}
-                                </span>{" "}
-                                USD
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <a href="https://testnet-explorer.blockstack.org/txid/0x7f5db3a604f738af695b0b10c0369c42fd7a0efbcc25115fa5711f074abf92b6">
-                                <div className="flex justify-center">
-                                  <Explorer />
+                              </TableCell>
+                              <TableCell>
+                                <div className="text-sm text-white">
+                                  {value.reward} STX
                                 </div>
-                              </a>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
+                                <div className="text-sm">
+                                  <span className="text-warning-500">
+                                    {parseFloat(
+                                      value.reward /
+                                        (prices.stxusd * prices.btcusd)
+                                    ).toFixed(2)}
+                                  </span>{" "}
+                                  BTC |{" "}
+                                  <span className="text-success-600">
+                                    {parseFloat(
+                                      prices.stxusd / value.reward
+                                    ).toFixed(2)}
+                                  </span>{" "}
+                                  USD
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <a href="https://testnet-explorer.blockstack.org/txid/0x7f5db3a604f738af695b0b10c0369c42fd7a0efbcc25115fa5711f074abf92b6">
+                                  <div className="flex justify-center">
+                                    <Explorer />
+                                  </div>
+                                </a>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -342,7 +409,7 @@ function MyPortfolio() {
               <div>
                 <div className="flex flex-wrap justify-between mb-3 text-gray-200">
                   <div className="flex">
-                    <span>3 Addresses</span>
+                    <span>{state.stxAddress.length} addresses</span>
                   </div>
                   <div className="flex">
                     <span>
@@ -359,7 +426,12 @@ function MyPortfolio() {
                           <div className="flex flex-wrap items-center space-x-3">
                             <span>{value}</span>
                             <ContextNav
-                              menuItems={<MenuItems />}
+                              menuItems={
+                                <MenuItems
+                                  stx={value}
+                                  username={state.username}
+                                />
+                              }
                               buttonIcon={<MenuIcon />}
                             ></ContextNav>
                           </div>
@@ -405,7 +477,12 @@ function MyPortfolio() {
                           <div className="flex flex-wrap items-center space-x-3">
                             <span>{value}</span>
                             <ContextNav
-                              menuItems={<MenuItems />}
+                              menuItems={
+                                <MenuItems
+                                  btc={value}
+                                  username={state.username}
+                                />
+                              }
                               buttonIcon={<MenuIcon />}
                             ></ContextNav>
                           </div>
@@ -476,7 +553,10 @@ function MyPortfolio() {
                     </Select>
                   </div>
                 </div>
-                <DummyGraph className="w-full"></DummyGraph>
+                {/* <ChartCard title="Lines">
+                  <Line {...lineOptions} />
+                  <ChartLegend legends={lineLegends} />
+                </ChartCard> */}
               </div>
               <button
                 className="mt-4 mb-6 btn btn-outline-primary btn-sm btn-block"
@@ -544,7 +624,10 @@ function MyPortfolio() {
                     </Select>
                   </div>
                 </div>
-                <DummyGraph className="w-full"></DummyGraph>
+                {/* <ChartCard title="Lines">
+                  <Line {...lineOptions} />
+                  <ChartLegend legends={lineLegends} />
+                </ChartCard> */}
               </div>
               <button className="mt-4 mb-6 btn btn-outline-gray btn-sm btn-block">
                 Stack now
