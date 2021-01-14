@@ -3,8 +3,9 @@ import {
   bufferCV,
   uintCV,
   tupleCV,
-  noneCV,
+  standardPrincipalCVFromAddress,
   standardPrincipalCV,
+  noneCV,
 } from "@stacks/transactions";
 import BN from "bn.js";
 import logo from "../icons/logo.svg";
@@ -16,7 +17,6 @@ async function delegateSTX({ poxAddr, amountSTX, delegateToo, burnHt }) {
   const { hashMode, data } = decodeBtcAddress(poxAddr);
   const hashModeBuffer = bufferCV(new BN(hashMode, 10).toArrayLike(Buffer));
   const hashbytes = bufferCV(data);
-  console.log(hashbytes, hashModeBuffer);
   const poxAddressCV = tupleCV({
     hashbytes,
     version: hashModeBuffer,

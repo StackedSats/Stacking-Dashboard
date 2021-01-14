@@ -4,22 +4,24 @@ import {
   uintCV,
   tupleCV,
   standardPrincipalCV,
+  noneCV,
 } from "@stacks/transactions";
 import BN from "bn.js";
 import logo from "../icons/logo.svg";
 import { decodeBtcAddress } from "./utils";
 import buffer from "buffer";
+import { getPerson } from "../scripts/auth";
 const Buffer = buffer.Buffer;
 
 // ST000000000000000000002AMW42H
 // name : pox
 export default async function delegationLock({
   stxValue,
-  stacker,
-  poxaddr,
+
   htLockPeriod,
   amountustx,
 }) {
+  const poxaddr = "n2VrgRFbKvcesbqerVtJEC8p5Lr2LQKtmB";
   const { hashMode, data } = decodeBtcAddress(poxaddr);
   const hashModeBuffer = bufferCV(new BN(hashMode, 10).toArrayLike(Buffer));
   const hashbytes = bufferCV(data);
@@ -35,12 +37,11 @@ export default async function delegationLock({
     contractName: "pox",
     functionName: "delegate-stack-stx",
     functionArgs: [
-      standardPrincipalCV(stacker),
+      standardPrincipalCV(getPerson()._profile.stxAddress),
       uintCV(stxValue),
       poxAddressCV,
       uintCV(amountustx),
-
-      //  uintCV(htLockPeriod),
+      uintCV(htLockPeriod),
     ],
     appDetails: {
       name: "StakedStats",

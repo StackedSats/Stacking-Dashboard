@@ -35,8 +35,11 @@ import { useDispatch, useSelector } from "react-redux";
 import delegateSTX from "../delegation/1.delegatestx";
 import "../assets/css/tippy.css";
 import { Right } from "../components/right";
+import delegationLock from "../delegation/2.delegationLock";
+import getStackerInfor from "../delegation/getStackerInfo";
 
 import { Tooltip } from "react-tippy";
+const micro = 1000000;
 
 const MenuIcon = () => {
   return (
@@ -201,6 +204,7 @@ function MyPortfolio() {
       if (values.data.txs) setTxs(values.data.txs);
     };
     fetchData();
+    getStackerInfor();
   }, [state, state.username]);
 
   const addAddress = async () => {
@@ -218,10 +222,16 @@ function MyPortfolio() {
   const onStack = async () => {
     const delegateStx = await delegateSTX({
       poxAddr: "n2VrgRFbKvcesbqerVtJEC8p5Lr2LQKtmB",
-      amountSTX: stx,
+      amountSTX: stx * micro,
       delegateToo: "ST3K2B2FH1AYXD26WV6YZY4DAA82AZNK967BNB9BK",
       burnHt: 3,
     });
+    const delegateLock = await delegationLock({
+      stxValue: stx * micro,
+      htLockPeriod: 10,
+      amountustx: stx * micro,
+    });
+    console.log(delegateLock, delegateStx);
   };
 
   return (
@@ -252,22 +262,11 @@ function MyPortfolio() {
                       <span>Pending BTC Reward</span>
                       <span>50k sats</span>
                     </div>
-                    <div className="flex flex-wrap items-center justify-between py-2 ">
-                      <span>Compound BTC Reward</span>
-                      <span className="">896k sats</span>
-                    </div>
                   </div>
                   <button className="mt-4 mb-6 btn btn-outline-warning btn-sm btn-block">
                     Claim your BTC Reward
                   </button>
                   <div className="xl:-mb-8">
-                    <div className="flex justify-end mb-4">
-                      <div>
-                        <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
-                          <option>Daily</option>
-                        </Select>
-                      </div>
-                    </div>
                     <DummyGraph2 className="w-full"></DummyGraph2>
                   </div>
                 </div>
@@ -516,7 +515,7 @@ function MyPortfolio() {
                   </div>
                   <div className="flex space-x-2">
                     <span className="text-lg font-medium text-success-400">
-                      {portfolio.balance}
+                      {portfolio.balance / 1000000}
                     </span>
                   </div>
                 </div>
@@ -525,7 +524,9 @@ function MyPortfolio() {
                     <span>Available Balance</span>
                   </div>
                   <div className="flex space-x-2">
-                    <span>{portfolio.balance - portfolio.locked}</span>
+                    <span>
+                      {(portfolio.balance - portfolio.locked) / 1000000}
+                    </span>
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center justify-between py-2">
@@ -586,7 +587,9 @@ function MyPortfolio() {
                   <div className="flex space-x-2">
                     <span className="text-lg font-medium text-success-400">
                       {parseFloat(
-                        portfolio.balance / (prices.stxusd * prices.btcusd)
+                        portfolio.balance /
+                          1000000 /
+                          (prices.stxusd * prices.btcusd)
                       ).toFixed(2)}
                       BTC
                     </span>
@@ -600,8 +603,9 @@ function MyPortfolio() {
                     <span>
                       {" "}
                       {parseFloat(
-                        portfolio.balance -
-                          portfolio.locked / (prices.stxusd * prices.btcusd)
+                        (portfolio.balance - portfolio.locked) /
+                          1000000 /
+                          (prices.stxusd * prices.btcusd)
                       ).toFixed(2)}{" "}
                       BTC
                     </span>
