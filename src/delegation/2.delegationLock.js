@@ -11,15 +11,17 @@ import logo from "../icons/logo.svg";
 import { decodeBtcAddress } from "./utils";
 import buffer from "buffer";
 import { getPerson } from "../scripts/auth";
+import axios from "axios";
 const Buffer = buffer.Buffer;
 
 // ST000000000000000000002AMW42H
 // name : pox
 export default async function delegationLock({
   stxValue,
-
+  delegateStx,
   htLockPeriod,
   amountustx,
+  username,
 }) {
   const poxaddr = "n2VrgRFbKvcesbqerVtJEC8p5Lr2LQKtmB";
   const { hashMode, data } = decodeBtcAddress(poxaddr);
@@ -33,7 +35,7 @@ export default async function delegationLock({
   console.log(poxAddressCV.data);
 
   const options = {
-    contractAddress: "ST000000000000000000002AMW42H",
+    contractAddress: "SP000000000000000000002Q6VF78.pox",
     contractName: "pox",
     functionName: "delegate-stack-stx",
     functionArgs: [
@@ -50,6 +52,18 @@ export default async function delegationLock({
     finished: (data) => {
       console.log("TX ID:", data.txId);
       console.log("Raw TX:", data.txRaw);
+      axios({
+        url: `${process.env.REACT_APP_BACKENDURL}/transactionRecords`,
+        method: "post",
+        headers: {
+          "a-auth-token": localStorage.getItem("auth"),
+          "Content-type": "application/json",
+        },
+        data: {
+          username,
+          txids: { delegateStx, delegateStxLock: data.txId },
+        },
+      });
     },
   };
 

@@ -88,55 +88,6 @@ const MenuItems = ({ stx, btc, username }) => {
   );
 };
 
-export const lineOptions = {
-  data: {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-      {
-        label: "Organic",
-        /**
-         * These colors come from Tailwind CSS palette
-         * https://tailwindcss.com/docs/customizing-colors/#default-color-palette
-         */
-        backgroundColor: "#0694a2",
-        borderColor: "#0694a2",
-        data: [43, 48, 40, 54, 67, 73, 70],
-        fill: true,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    tooltips: {
-      mode: "index",
-      intersect: false,
-    },
-    hover: {
-      mode: "nearest",
-      intersect: true,
-    },
-    scales: {
-      x: {
-        display: true,
-        scaleLabel: {
-          display: true,
-          labelString: "Month",
-        },
-      },
-      y: {
-        display: true,
-        scaleLabel: {
-          display: true,
-          labelString: "Value",
-        },
-      },
-    },
-  },
-  legend: {
-    display: false,
-  },
-};
-
 export const lineLegends = [{ title: "Organic", color: "bg-teal-600" }];
 
 const Left = () => {
@@ -167,9 +118,56 @@ function MyPortfolio() {
   const [addressValue, setaddressValue] = useState([]);
   const [stxAddress, setStxAddress] = useState([]);
   const [btcAddress, addBTCAddress] = useState([]);
+  const [message, showBTCMessage] = useState(false);
+  const [addaddress, showAddAddress] = useState(false);
+
   const [stx, setSTX] = useState(0);
 
   const wallet = getPerson();
+
+  const lineOptions = {
+    data: {
+      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      datasets: [
+        {
+          backgroundColor: "#0694a2",
+          borderColor: "#0694a2",
+          data: [43, 48, 40, 54, 67, 73, 70],
+          fill: true,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      tooltips: {
+        mode: "index",
+        intersect: false,
+      },
+      hover: {
+        mode: "nearest",
+        intersect: true,
+      },
+      scales: {
+        x: {
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: "Month",
+          },
+        },
+        y: {
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: "Value",
+          },
+        },
+      },
+    },
+    legend: {
+      display: false,
+    },
+  };
 
   useEffect(() => {
     const data = getPerson();
@@ -185,6 +183,12 @@ function MyPortfolio() {
         method: "post",
         data: state,
       });
+
+      const graph = await axios.post(
+        `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
+        { username: state.username }
+      );
+      console.log("dxfsadas", graph);
 
       const vs = [];
 
@@ -209,7 +213,7 @@ function MyPortfolio() {
 
   const addAddress = async () => {
     const makeTheCal = await axios({
-      url: `${process.env.REACT_APP_BACKENDURL}/addresses}`,
+      url: `${process.env.REACT_APP_BACKENDURL}/addresses`,
       data: {
         username: state.username,
         stxAddress: wallet._profile.stxAddress,
@@ -219,6 +223,26 @@ function MyPortfolio() {
     console.log(makeTheCal);
   };
 
+  const claim = async () => {
+    if (state.btcAddress.length === 0) {
+      showAddAddress(true);
+    } else {
+      const result = await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_BACKENDURL}/btcClaim`,
+        headers: {
+          "x-auth-token": localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        data: { username: state.username },
+      });
+      console.log(result);
+      if (result.status === 200) {
+        showBTCMessage(true);
+      }
+    }
+  };
+
   const onStack = async () => {
     const delegateStx = await delegateSTX({
       poxAddr: "n2VrgRFbKvcesbqerVtJEC8p5Lr2LQKtmB",
@@ -226,10 +250,25 @@ function MyPortfolio() {
       delegateToo: "ST3K2B2FH1AYXD26WV6YZY4DAA82AZNK967BNB9BK",
       burnHt: 3,
     });
+
+    await axios.post(`${process.env.REACT_APP_BACKENDURL}/callHistory`, {
+      functionName: "delegate-stx",
+      stxAddress: getPerson()._profile.stxAddress,
+      fee: 300,
+    });
+
     const delegateLock = await delegationLock({
       stxValue: stx * micro,
       htLockPeriod: 10,
       amountustx: stx * micro,
+      username: state.username,
+      delegateStx,
+    });
+
+    await axios.post(`${process.env.REACT_APP_BACKENDURL}/callHistory`, {
+      functionName: "delegate-stx",
+      stxAddress: getPerson()._profile.stxAddress,
+      fee: 300,
     });
     console.log(delegateLock, delegateStx);
   };
@@ -251,24 +290,36 @@ function MyPortfolio() {
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-400">
                       <span>Total BTC Reward</span>
                       <span className="text-lg text-warning-500">
-                        896k sats
+                        {state.totalBTCReward}
                       </span>
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-400">
                       <span>Daily BTC Reward</span>
-                      <span className="">896k sats</span>
+                      <span className=""></span>
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 text-gray-300 border-b border-gray-400">
                       <span>Pending BTC Reward</span>
-                      <span>50k sats</span>
+                      <span>{state.pendingBTCReward}</span>
                     </div>
                   </div>
-                  <button className="mt-4 mb-6 btn btn-outline-warning btn-sm btn-block">
+                  <button
+                    className="mt-4 mb-6 btn btn-outline-warning btn-sm btn-block"
+                    onClick={claim}
+                  >
                     Claim your BTC Reward
                   </button>
-                  <div className="xl:-mb-8">
-                    <DummyGraph2 className="w-full"></DummyGraph2>
-                  </div>
+                  {addaddress && (
+                    <p>Please add a btc address for payment checkout.</p>
+                  )}
+                  {message && (
+                    <p>
+                      Please wait for the Admin ( neko@stackedstats.com ) to
+                      confirm your withdrawal.
+                    </p>
+                  )}
+                  <ChartCard title="Lines">
+                    <Line {...lineOptions} />
+                  </ChartCard>
                 </div>
               </div>
               <div className="w-full xl:w-2/3">
@@ -384,8 +435,7 @@ function MyPortfolio() {
                 <div className="flex flex-wrap items-center">
                   <h2 className="mr-3 text-2xl font-medium">Portfolio</h2>
                   <span className="text-gray-200">
-                    {wallet._profile.stxAddress.length +
-                      state.btcAddress.length}
+                    {1 + state.btcAddress.length}
                   </span>
                 </div>
                 <button className="flex items-center btn btn-outline-primary btn-xs">
@@ -396,7 +446,7 @@ function MyPortfolio() {
               <div className="flex flex-wrap justify-between">
                 <div className="flex items-baseline space-x-2">
                   <span className="text-2xl">STX</span>
-                  <span className="text-gray-200">100%</span>
+                  {/* <span className="text-gray-200">100%</span> */}
                 </div>
                 <div className="flex items-center space-x-2">
                   <span className="text-2xl">
@@ -447,7 +497,7 @@ function MyPortfolio() {
               <div className="flex flex-wrap justify-between">
                 <div className="flex items-baseline space-x-2">
                   <span className="text-2xl">BTC</span>
-                  <span className="text-gray-200">100%</span>
+                  {/* <span className="text-gray-200">100%</span> */}
                 </div>
                 <div className="flex items-center space-x-2">
                   <span className="text-2xl">
@@ -459,7 +509,7 @@ function MyPortfolio() {
               <div>
                 <div className="flex flex-wrap justify-between mb-3 text-gray-200">
                   <div className="flex">
-                    <span>2 Addresses</span>
+                    <span>{state.btcAddress.length} Addresses</span>
                   </div>
                   <div className="flex">
                     <span>
@@ -616,7 +666,12 @@ function MyPortfolio() {
                     <span>Stacking Balance</span>
                   </div>
                   <div className="flex space-x-2">
-                    <span>100 STX</span>
+                    <span>
+                      {parseFloat(
+                        stx / (prices.stxusd * prices.btcusd)
+                      ).toFixed(2)}{" "}
+                      BTV
+                    </span>
                   </div>
                 </div>
               </div>

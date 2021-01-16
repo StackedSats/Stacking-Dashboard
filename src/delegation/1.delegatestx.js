@@ -3,7 +3,6 @@ import {
   bufferCV,
   uintCV,
   tupleCV,
-  standardPrincipalCVFromAddress,
   standardPrincipalCV,
   noneCV,
 } from "@stacks/transactions";
@@ -11,6 +10,7 @@ import BN from "bn.js";
 import logo from "../icons/logo.svg";
 import { decodeBtcAddress } from "./utils";
 import buffer from "buffer";
+import axios from "axios";
 const Buffer = buffer.Buffer;
 
 async function delegateSTX({ poxAddr, amountSTX, delegateToo, burnHt }) {
@@ -24,7 +24,7 @@ async function delegateSTX({ poxAddr, amountSTX, delegateToo, burnHt }) {
   console.log(poxAddressCV.data);
 
   const options = {
-    contractAddress: "ST000000000000000000002AMW42H",
+    contractAddress: "SP000000000000000000002Q6VF78.pox",
     contractName: "pox",
     functionName: "delegate-stx",
     functionArgs: [
@@ -41,6 +41,7 @@ async function delegateSTX({ poxAddr, amountSTX, delegateToo, burnHt }) {
     finished: (data) => {
       console.log("TX ID:", data.txId);
       console.log("Raw TX:", data.txRaw);
+      return data.txId;
     },
   };
 
