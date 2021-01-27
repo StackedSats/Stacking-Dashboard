@@ -22,7 +22,7 @@ async function delegateStx(delegateTo, poxAddr, rewardCycle) {
   });
 
   const options = {
-    contractAddress: "SP000000000000000000002Q6VF78.pox",
+    contractAddress: "ST000000000000000000002AMW42H.pox",
     contractName: "pox",
     functionName: "stack-aggregation-commit",
     functionArgs: [poxAddressCV, uintCV(rewardCycle)],

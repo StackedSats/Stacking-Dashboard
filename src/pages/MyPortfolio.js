@@ -174,7 +174,7 @@ function MyPortfolio() {
     console.log(data);
     const fetchData = async () => {
       const result = await axios.get(
-        `https://stacks-node-api.blockstack.org/extended/v1/address/${data._profile.stxAddress}/balances`
+        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${data._profile.stxAddress}/balances`
       );
       setPortfolio(result.data.stx);
 
@@ -195,7 +195,7 @@ function MyPortfolio() {
       for (let i of state.stxAddress) {
         try {
           const result = await axios.get(
-            `https://stacks-node-api.blockstack.org/extended/v1/address/${i}/balances`
+            `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${i}/balances`
           );
           vs.push(result);
         } catch (e) {

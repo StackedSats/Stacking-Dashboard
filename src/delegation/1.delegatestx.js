@@ -24,7 +24,7 @@ async function delegateSTX({ poxAddr, amountSTX, delegateToo, burnHt }) {
   console.log(poxAddressCV.data);
 
   const options = {
-    contractAddress: "SP000000000000000000002Q6VF78.pox",
+    contractAddress: "ST000000000000000000002AMW42H.pox",
     contractName: "pox",
     functionName: "delegate-stx",
     functionArgs: [
