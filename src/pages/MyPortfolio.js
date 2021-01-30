@@ -27,7 +27,7 @@ import { Doughnut, Line, Bar } from "react-chartjs-2";
 import ChartLegend from "../components/Chart/ChartLegend";
 
 import { userDetails } from "../redux/reducers";
-
+import Modal from "../components/address-modal";
 import ContextNav from "../components/ContextNav";
 import { DummyGraph2, Explorer } from "../icons";
 import { userSession, getPerson, getUserData } from "../scripts/auth";
@@ -116,23 +116,50 @@ function MyPortfolio() {
     burnchain_unlock_height: 0,
   });
   const [addressValue, setaddressValue] = useState([]);
-  const [stxAddress, setStxAddress] = useState([]);
-  const [btcAddress, addBTCAddress] = useState([]);
+  const [stxAddress, setStxAddress] = useState("");
+  const [btcAddress, addBTCAddress] = useState("");
   const [message, showBTCMessage] = useState(false);
   const [addaddress, showAddAddress] = useState(false);
+  const [dailyReward, setDailyReward] = useState(0);
+  const [dateForGraph, setDateForGraph] = useState([]);
+  const [rewardForGraph, setRewardForGraph] = useState([]);
+
+  //Address Modal
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+
+  function openAddressModal() {
+    setIsAddressModalOpen(true);
+  }
+
+  function closeAddressModal() {
+    setIsAddressModalOpen(false);
+  }
+
+  //Address Modal
+
+  const [isManualAddressModalOpen, setIsManualAddressModalOpen] = useState(
+    false
+  );
+
+  function openManualAddressModal() {
+    setIsManualAddressModalOpen(true);
+  }
+
+  function closeManualAddressModal() {
+    setIsManualAddressModalOpen(false);
+  }
 
   const [stx, setSTX] = useState(0);
-
   const wallet = getPerson();
 
   const lineOptions = {
     data: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      labels: dateForGraph,
       datasets: [
         {
           backgroundColor: "#0694a2",
           borderColor: "#0694a2",
-          data: [43, 48, 40, 54, 67, 73, 70],
+          data: rewardForGraph,
           fill: true,
         },
       ],
@@ -188,7 +215,22 @@ function MyPortfolio() {
         `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
         { username: state.username }
       );
-      console.log("dxfsadas", graph);
+
+      if (graph.data.length > 0) {
+        setDateForGraph(graph.data.date);
+        setRewardForGraph(graph.data.reward);
+      }
+
+      const claimReward = await axios.post({
+        url: `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
+        data: { username: state.username },
+      });
+
+      if (claimReward.status === 405) {
+        setDailyReward(0);
+      } else {
+        setDailyReward(claimReward.data.value);
+      }
 
       const vs = [];
 
@@ -197,7 +239,8 @@ function MyPortfolio() {
           const result = await axios.get(
             `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${i}/balances`
           );
-          vs.push(result);
+          console.log(result);
+          vs.push(result.data.stx.balance);
         } catch (e) {
           vs.push(0);
         }
@@ -213,10 +256,11 @@ function MyPortfolio() {
 
   const addAddress = async () => {
     const makeTheCal = await axios({
+      method: "post",
       url: `${process.env.REACT_APP_BACKENDURL}/addresses`,
       data: {
         username: state.username,
-        stxAddress: wallet._profile.stxAddress,
+        stxAddress,
         btcAddress,
       },
     });
@@ -234,7 +278,7 @@ function MyPortfolio() {
           "x-auth-token": localStorage.getItem("auth"),
           "Content-Type": "application/json",
         },
-        data: { username: state.username },
+        data: { username: state.username, btcAddress },
       });
       console.log(result);
       if (result.status === 200) {
@@ -295,7 +339,7 @@ function MyPortfolio() {
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-400">
                       <span>Daily BTC Reward</span>
-                      <span className=""></span>
+                      <span className="">{dailyReward}</span>
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 text-gray-300 border-b border-gray-400">
                       <span>Pending BTC Reward</span>
@@ -308,6 +352,7 @@ function MyPortfolio() {
                   >
                     Claim your BTC Reward
                   </button>
+
                   {addaddress && (
                     <p>Please add a btc address for payment checkout.</p>
                   )}
@@ -317,7 +362,7 @@ function MyPortfolio() {
                       confirm your withdrawal.
                     </p>
                   )}
-                  <ChartCard title="Lines">
+                  <ChartCard title="BTC Rewards">
                     <Line {...lineOptions} />
                   </ChartCard>
                 </div>
@@ -430,6 +475,18 @@ function MyPortfolio() {
 
         <div className="grid gap-6 mb-8 xl:grid-cols-3">
           <Card>
+            <Modal
+              openAddressModal={openAddressModal}
+              closeAddressModal={closeAddressModal}
+              openManualAddressModal={openManualAddressModal}
+              closeManualAddressModal={closeManualAddressModal}
+              isAddressModalOpen={isAddressModalOpen}
+              isManualAddressModalOpen={isManualAddressModalOpen}
+              addBTCAddress={addBTCAddress}
+              addAddress={addAddress}
+              stxAddress={stxAddress}
+              setStxAddress={setStxAddress}
+            />
             <CardBody className="space-y-8 text-white">
               <div className="flex flex-wrap justify-between">
                 <div className="flex flex-wrap items-center">
@@ -438,9 +495,6 @@ function MyPortfolio() {
                     {1 + state.btcAddress.length}
                   </span>
                 </div>
-                <button className="flex items-center btn btn-outline-primary btn-xs">
-                  <span className="mr-2 text-lg">+</span> Add Address
-                </button>
               </div>
               {/* body */}
               <div className="flex flex-wrap justify-between">

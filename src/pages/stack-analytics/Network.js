@@ -33,11 +33,11 @@ function Blank() {
               <TestNet className="mr-4" />
             </NetworkCard>
           </div>
-          <div>
+          {/* <div>
             <NetworkCard title="Total clients">
               <MainNet className="mr-4" />
             </NetworkCard>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

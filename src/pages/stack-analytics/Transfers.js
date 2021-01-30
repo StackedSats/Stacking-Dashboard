@@ -43,7 +43,7 @@ function Blank() {
   useEffect(() => {
     const fetch = async () => {
       const data = await axios.get(
-        "https://stacks-node-api.blockstack.org/extended/v1/address/ST000000000000000000002AMW42H/transactions"
+        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/ST000000000000000000002AMW42H/transactions`
       );
       console.log(data.data);
       setList(data.data.results);

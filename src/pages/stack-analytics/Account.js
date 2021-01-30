@@ -65,7 +65,7 @@ function Blank() {
     const fetch = async () => {
       const addr = getPerson();
       const data = await axios.get(
-        `https://stacks-node-api.blockstack.org/extended/v1/address/${addr._profile.stxAddress}/transactions`
+        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${addr._profile.stxAddress}/transactions`
       );
       console.log(data);
       setDate(data.data.results);
@@ -123,7 +123,7 @@ function Blank() {
               </TableContainer>
             </CardBody>
           </Card>
-          <Card className="mb-8 shadow-md">
+          {/* <Card className="mb-8 shadow-md">
             <CardBody className="text-white">
               <TabGroup numTabs={3} direction={TabGroup.direction.HORIZONTAL}>
                 <div className="flex items-center justify-between text-white">
@@ -222,7 +222,7 @@ function Blank() {
                 </TabGroup.TabPanel>
               </TabGroup>
             </CardBody>
-          </Card>
+          </Card> */}
         </div>
       </div>
     </>
