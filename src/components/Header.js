@@ -54,7 +54,7 @@ function Header() {
 
         {/* <!-- Search input --> */}
         <div className="flex flex-1 lg:mr-32">
-          <div className="relative w-full max-w-3xl mr-6 focus-within:text-primary-500">
+          {/* <div className="relative w-full max-w-3xl mr-6 focus-within:text-primary-500">
             <div className="absolute inset-y-0 flex items-center pl-2">
               <SearchIcon className="w-4 h-4" aria-hidden="true" />
             </div>
@@ -63,7 +63,7 @@ function Header() {
               placeholder="Search by name, hash or number"
               aria-label="Search"
             />
-          </div>
+          </div> */}
         </div>
 
         {/* <!-- Tools --> */}

@@ -73,12 +73,12 @@ function Login() {
 
             <p className="mt-4 font-medium text-gray-300">
               By pressing “Create account” you agree to our &nbsp;
-              <Link
+              <a
                 className="hover:underline text-primary-500"
-                to="/app/blank"
+                href="https://legacy.blockstack.org/legal/privacy-policy"
               >
                 privacy policy
-              </Link>
+              </a>
             </p>
             <p className="mt-6">Already have an account?</p>
             <Link

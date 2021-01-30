@@ -61,6 +61,7 @@ export default async function delegationLock({
         },
         data: {
           username,
+          stxValue,
           txids: { delegateStx, delegateStxLock: data.txId },
         },
       });

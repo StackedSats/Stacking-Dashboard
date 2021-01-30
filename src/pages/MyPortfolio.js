@@ -117,7 +117,7 @@ function MyPortfolio() {
   });
   const [addressValue, setaddressValue] = useState([]);
   const [stxAddress, setStxAddress] = useState("");
-  const [btcAddress, addBTCAddress] = useState("");
+  const [btcAddress, addBTCAddress] = useState(state.btcAddress[0]);
   const [message, showBTCMessage] = useState(false);
   const [addaddress, showAddAddress] = useState(false);
   const [dailyReward, setDailyReward] = useState(0);
@@ -152,6 +152,7 @@ function MyPortfolio() {
   const [stx, setSTX] = useState(0);
   const wallet = getPerson();
 
+  console.log(dateForGraph, rewardForGraph);
   const lineOptions = {
     data: {
       labels: dateForGraph,
@@ -211,15 +212,18 @@ function MyPortfolio() {
         data: state,
       });
 
+      console.log(values.data.txs);
+      if (values.data.txs) setTxs(values.data.txs);
+
       const graph = await axios.post(
         `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
         { username: state.username }
       );
 
-      if (graph.data.length > 0) {
-        setDateForGraph(graph.data.date);
-        setRewardForGraph(graph.data.reward);
-      }
+      console.log(graph.data);
+
+      setDateForGraph(graph.data.date);
+      setRewardForGraph(graph.data.reward);
 
       const claimReward = await axios.post({
         url: `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
@@ -247,8 +251,6 @@ function MyPortfolio() {
       }
 
       setaddressValue(vs);
-      console.log(values.data.txs);
-      if (values.data.txs) setTxs(values.data.txs);
     };
     fetchData();
     getStackerInfor();
@@ -317,6 +319,7 @@ function MyPortfolio() {
     console.log(delegateLock, delegateStx);
   };
 
+  console.log(lineOptions);
   return (
     <>
       <PageTitle left={<Left />} right={<Right />}></PageTitle>
@@ -397,7 +400,7 @@ function MyPortfolio() {
                         <TableCell>From</TableCell>
                         <TableCell>To</TableCell>
                         <TableCell>Reward</TableCell>
-                        <TableCell>Explorer</TableCell>
+                        {/* <TableCell>Explorer</TableCell> */}
                       </tr>
                     </TableHeader>
                     <TableBody className="text-lg divide-gray-500">
@@ -455,13 +458,13 @@ function MyPortfolio() {
                                   USD
                                 </div>
                               </TableCell>
-                              <TableCell>
+                              {/* <TableCell>
                                 <a href="https://testnet-explorer.blockstack.org/txid/0x7f5db3a604f738af695b0b10c0369c42fd7a0efbcc25115fa5711f074abf92b6">
                                   <div className="flex justify-center">
                                     <Explorer />
                                   </div>
                                 </a>
-                              </TableCell>
+                              </TableCell> */}
                             </TableRow>
                           );
                         })}
@@ -578,7 +581,13 @@ function MyPortfolio() {
                       <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
                         <div className="flex flex-wrap justify-between">
                           <div className="flex flex-wrap items-center space-x-3">
-                            <span>{value}</span>
+                            <span
+                              onClick={() => {
+                                addBTCAddress(value);
+                              }}
+                            >
+                              {value}
+                            </span>
                             <ContextNav
                               menuItems={
                                 <MenuItems

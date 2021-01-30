@@ -80,14 +80,14 @@ function Blank() {
                         >
                           Transfers
                         </TabGroup.Tab>
-                        <TabGroup.Tab
+                        {/* <TabGroup.Tab
                           index={1}
                           className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
                           activeClassName="text-primary-500 dark:text-white"
                           inactiveClassName="text-gray-400 dark:text-gray-300"
                         >
                           Largest Transfers
-                        </TabGroup.Tab>
+                        </TabGroup.Tab> */}
                       </TabGroup.TabList>
                       <div className="flex items-center ml-10 text-primary-400">
                         <FiDownload />
