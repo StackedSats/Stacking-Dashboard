@@ -222,7 +222,13 @@ function MyPortfolio() {
 
       console.log(graph.data);
 
-      setDateForGraph(graph.data.date);
+      setDateForGraph(
+        graph.data.date.map((value) => {
+          console.log(value);
+          var date = new Date(value);
+          return date.toLocaleDateString();
+        })
+      );
       setRewardForGraph(graph.data.reward);
 
       const claimReward = await axios.post({
