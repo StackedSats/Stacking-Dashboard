@@ -14,6 +14,7 @@ OR
 ```
 - Clone the repo
 - npm install
+- Spin up the server. By default it would point to localhost, port 4500.
 - Rename config.dev.js -> config.js and .env.dev -> .env and fill in the required fields.
 ```
 
@@ -46,21 +47,3 @@ This project is GNU Public licenced.
   - joi
   - stxcalculator
 - State Management: Redux
-
-##### Directory structure
-
-.
-+-- config.js
-+-- components
-| +-- all different components
-+-- scripts
-| +-- Delegation
-| \*-- All delegation related scripts
-+-- build
-| +-- React Build Folder containing HTML,CSS,JS of the frontend ( to be setup on server not included in repo )
-+-- package.json
-+-- Public
-| +-- Some assets used during build
-+-- README.md
-+-- LICENCE
-+-- .env
