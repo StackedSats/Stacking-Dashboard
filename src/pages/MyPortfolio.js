@@ -201,8 +201,9 @@ function MyPortfolio() {
     const data = getPerson();
     console.log(data);
     const fetchData = async () => {
+      const address = data._profile.stxAddress.testnet;
       const result = await axios.get(
-        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${data._profile.stxAddress}/balances`
+        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${address}/balances`
       );
       setPortfolio(result.data.stx);
 
@@ -231,10 +232,10 @@ function MyPortfolio() {
       );
       setRewardForGraph(graph.data.reward);
 
-      const claimReward = await axios.post({
-        url: `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
-        data: { username: state.username },
-      });
+      const claimReward = await axios.post(
+        `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
+        { username: state.username }
+      );
 
       if (claimReward.status === 405) {
         setDailyReward(0);
@@ -413,7 +414,7 @@ function MyPortfolio() {
                       {txs.length > 0 &&
                         txs.map((value, index) => {
                           return (
-                            <TableRow>
+                            <TableRow key={index}>
                               <TableCell>
                                 <div className="text-lg text-white">
                                   {value.date}
