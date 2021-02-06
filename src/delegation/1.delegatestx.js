@@ -5,6 +5,7 @@ import {
   tupleCV,
   standardPrincipalCV,
   noneCV,
+  someCV,
 } from "@stacks/transactions";
 import BN from "bn.js";
 import logo from "../icons/logo.svg";
@@ -31,7 +32,7 @@ async function delegateSTX({ poxAddr, amountSTX, delegateToo, burnHt }) {
       uintCV(amountSTX),
       standardPrincipalCV("ST3K2B2FH1AYXD26WV6YZY4DAA82AZNK967BNB9BK"),
       noneCV(),
-      poxAddressCV,
+      noneCV(), // someCV(poxAddressCV),
     ],
 
     appDetails: {
