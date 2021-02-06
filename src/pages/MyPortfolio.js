@@ -533,7 +533,10 @@ function MyPortfolio() {
                 <ul>
                   {state.stxAddress.map((value, index) => {
                     return (
-                      <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
+                      <li
+                        className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300"
+                        key={index}
+                      >
                         <div className="flex flex-wrap justify-between">
                           <div className="flex flex-wrap items-center space-x-3">
                             <span>{value}</span>
@@ -584,7 +587,10 @@ function MyPortfolio() {
                 <ul>
                   {state.btcAddress.map((value, index) => {
                     return (
-                      <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
+                      <li
+                        className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300"
+                        key={index}
+                      >
                         <div className="flex flex-wrap justify-between">
                           <div className="flex flex-wrap items-center space-x-3">
                             <span
