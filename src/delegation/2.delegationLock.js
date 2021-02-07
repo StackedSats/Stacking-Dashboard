@@ -34,7 +34,7 @@ export default async function delegationLock({
   console.log(poxAddressCV.data);
 
   const options = {
-    contractAddress: "ST000000000000000000002AMW42H.pox",
+    contractAddress: "ST000000000000000000002AMW42H",
     contractName: "pox",
     functionName: "delegate-stack-stx",
     functionArgs: [

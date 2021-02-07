@@ -20,7 +20,7 @@ export default async function delegationLock() {
     contractName: "pox",
     functionName: "get-stacker-info",
     functionArgs: [standardPrincipalCV(testnet)],
-    senderAddress: "ST000000000000000000002AMW42H",
+    senderAddress: testnet,
     // appDetails: {
     //   name: "StakedStats",
     //   icon: { logo },

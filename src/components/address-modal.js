@@ -94,7 +94,10 @@ function Modals({
               <ul className="mt-6 mb-12">
                 {state.stxAddress.map((value, index) => {
                   return (
-                    <li className="flex items-center justify-between py-4 border-b border-gray-100">
+                    <li
+                      className="flex items-center justify-between py-4 border-b border-gray-100"
+                      key={index}
+                    >
                       <div className="flex items-center justify-between text-lg">
                         <MainNet width="32" />
                         <span className="ml-4">{value}</span>

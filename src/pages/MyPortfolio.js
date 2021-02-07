@@ -201,8 +201,9 @@ function MyPortfolio() {
     const data = getPerson();
     console.log(data);
     const fetchData = async () => {
+      const address = data._profile.stxAddress.testnet;
       const result = await axios.get(
-        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${data._profile.stxAddress.testnet}/balances`
+        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${address}/balances`
       );
       setPortfolio(result.data.stx);
 
@@ -231,10 +232,10 @@ function MyPortfolio() {
       );
       setRewardForGraph(graph.data.reward);
 
-      const claimReward = await axios.post({
-        url: `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
-        data: { username: state.username },
-      });
+      const claimReward = await axios.post(
+        `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
+        { username: state.username }
+      );
 
       if (claimReward.status === 405) {
         setDailyReward(0);
@@ -401,7 +402,7 @@ function MyPortfolio() {
                       {txs.length > 0 &&
                         txs.map((value, index) => {
                           return (
-                            <TableRow>
+                            <TableRow key={index}>
                               <TableCell>
                                 <div className="text-lg text-white">
                                   {value.date}
@@ -521,7 +522,10 @@ function MyPortfolio() {
                 <ul>
                   {state.stxAddress.map((value, index) => {
                     return (
-                      <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
+                      <li
+                        className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300"
+                        key={index}
+                      >
                         <div className="flex flex-wrap justify-between">
                           <div className="flex flex-wrap items-center space-x-3">
                             <span>{value}</span>
@@ -572,7 +576,10 @@ function MyPortfolio() {
                 <ul>
                   {state.btcAddress.map((value, index) => {
                     return (
-                      <li className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300">
+                      <li
+                        className="p-2 mb-1 border-l-4 cursor-pointer hover:bg-primary-400 bg-primary-600 border-primary-300"
+                        key={index}
+                      >
                         <div className="flex flex-wrap justify-between">
                           <div className="flex flex-wrap items-center space-x-3">
                             <span

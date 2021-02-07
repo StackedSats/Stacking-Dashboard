@@ -5,6 +5,7 @@ import {
   tupleCV,
   standardPrincipalCV,
   noneCV,
+  someCV,
 } from "@stacks/transactions";
 import BN from "bn.js";
 import logo from "../icons/logo.svg";
