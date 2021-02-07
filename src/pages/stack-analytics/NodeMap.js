@@ -118,14 +118,14 @@ function Blank() {
                 >
                   Mining Node
                 </TabGroup.Tab>
-                <TabGroup.Tab
+                {/* <TabGroup.Tab
                   index={1}
                   className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
                   activeClassName="text-white"
                   inactiveClassName="text-gray-300"
                 >
                   Block
-                </TabGroup.Tab>
+                </TabGroup.Tab> */}
               </TabGroup.TabList>
               <TabGroup.TabPanel
                 index={0}

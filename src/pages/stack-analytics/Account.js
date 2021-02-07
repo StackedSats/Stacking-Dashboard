@@ -65,7 +65,7 @@ function Blank() {
     const fetch = async () => {
       const addr = getPerson();
       const data = await axios.get(
-        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${addr._profile.stxAddress}/transactions`
+        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${addr._profile.stxAddress.testnet}/transactions`
       );
       console.log(data);
       setDate(data.data.results);

@@ -202,7 +202,7 @@ function MyPortfolio() {
     console.log(data);
     const fetchData = async () => {
       const result = await axios.get(
-        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${data._profile.stxAddress}/balances`
+        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${data._profile.stxAddress.testnet}/balances`
       );
       setPortfolio(result.data.stx);
 
@@ -296,33 +296,21 @@ function MyPortfolio() {
   };
 
   const onStack = async () => {
+    await axios.post(`${process.env.REACT_APP_BACKENDURL}/callHistory`, {
+      functionName: "delegate-stx",
+      stxAddress: getPerson()._profile.stxAddress.testnet,
+      fee: 300,
+    });
+
     const delegateStx = await delegateSTX({
+      username: state.username,
       poxAddr: "n2VrgRFbKvcesbqerVtJEC8p5Lr2LQKtmB",
       amountSTX: stx * micro,
       delegateToo: "ST3K2B2FH1AYXD26WV6YZY4DAA82AZNK967BNB9BK",
       burnHt: 3,
     });
 
-    await axios.post(`${process.env.REACT_APP_BACKENDURL}/callHistory`, {
-      functionName: "delegate-stx",
-      stxAddress: getPerson()._profile.stxAddress,
-      fee: 300,
-    });
-
-    const delegateLock = await delegationLock({
-      stxValue: stx * micro,
-      htLockPeriod: 10,
-      amountustx: stx * micro,
-      username: state.username,
-      delegateStx,
-    });
-
-    await axios.post(`${process.env.REACT_APP_BACKENDURL}/callHistory`, {
-      functionName: "delegate-stx",
-      stxAddress: getPerson()._profile.stxAddress,
-      fee: 300,
-    });
-    console.log(delegateLock, delegateStx);
+    console.log(delegateStx);
   };
 
   console.log(lineOptions);
@@ -390,12 +378,12 @@ function MyPortfolio() {
                       <span className="ml-1">Export</span>
                     </div>
                   </div>
-                  <div className="flex space-x-2">
+                  {/* <div className="flex space-x-2">
                     <button className="btn btn-primary btn-xs">Received</button>
                     <button className="text-white btn btn-outline-gray btn-xs">
                       Pending
                     </button>
-                  </div>
+                  </div> */}
                 </div>
                 <TableContainer className="mb-8">
                   <Table>
@@ -621,11 +609,11 @@ function MyPortfolio() {
                 <div className="flex flex-wrap items-center">
                   <h2 className="mr-3 text-2xl font-medium">STX balance</h2>
                 </div>
-                <div>
+                {/* <div>
                   <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                     <option>USD</option>
                   </Select>
-                </div>
+                </div> */}
               </div>
               <div>
                 <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-400">
@@ -666,13 +654,13 @@ function MyPortfolio() {
                 </div>
               </div>
               <div>
-                <div className="flex justify-end mb-4">
+                {/* <div className="flex justify-end mb-4">
                   <div>
                     <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                       <option>Daily</option>
                     </Select>
                   </div>
-                </div>
+                </div> */}
                 {/* <ChartCard title="Lines">
                   <Line {...lineOptions} />
                   <ChartLegend legends={lineLegends} />
@@ -693,9 +681,9 @@ function MyPortfolio() {
                   <h2 className="mr-3 text-2xl font-medium">BTC balance</h2>
                 </div>
                 <div>
-                  <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
+                  {/* <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
                     <option>USD</option>
-                  </Select>
+                  </Select> */}
                 </div>
               </div>
               <div>
@@ -744,7 +732,7 @@ function MyPortfolio() {
                   </div>
                 </div>
               </div>
-              <div>
+              {/* <div>
                 <div className="flex justify-end mb-4">
                   <div>
                     <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
@@ -755,11 +743,11 @@ function MyPortfolio() {
                 {/* <ChartCard title="Lines">
                   <Line {...lineOptions} />
                   <ChartLegend legends={lineLegends} />
-                </ChartCard> */}
-              </div>
-              <button className="mt-4 mb-6 btn btn-outline-gray btn-sm btn-block">
+                </ChartCard> 
+              </div>*/}
+              {/* <button className="mt-4 mb-6 btn btn-outline-gray btn-sm btn-block">
                 Stack now
-              </button>
+              </button>{" "} */}
             </CardBody>
           </Card>
         </div>
