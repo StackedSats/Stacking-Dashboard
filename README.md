@@ -32,6 +32,13 @@ OR
 - npm run build
 ```
 
+### Using Docker
+
+```
+- docker build --tag frontend .
+- docker run -p 8080:80 frontend   // now open localhost:8080 in your browser
+```
+
 ### LICENCE
 
 This project is GNU Public licenced.

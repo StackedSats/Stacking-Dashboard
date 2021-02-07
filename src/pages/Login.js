@@ -26,6 +26,12 @@ function Login() {
   const changePass = (e) => {
     setpassword(e.target.value);
   };
+
+  const _handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      login();
+    }
+  };
   const login = async () => {
     setError(false);
     const { error } = loginSchema.validate({ username });
@@ -75,6 +81,7 @@ function Login() {
                 placeholder="***************"
                 onChange={changePass}
                 value={password}
+                onKeyDown={_handleKeyDown}
               />
             </Label>
 

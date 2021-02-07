@@ -18,10 +18,9 @@ const Buffer = buffer.Buffer;
 // name : pox
 export default async function delegationLock({
   stxValue,
-  delegateStx,
+
   htLockPeriod,
   amountustx,
-  username,
 }) {
   const poxaddr = "n2VrgRFbKvcesbqerVtJEC8p5Lr2LQKtmB";
   const { hashMode, data } = decodeBtcAddress(poxaddr);
@@ -52,19 +51,6 @@ export default async function delegationLock({
     finished: (data) => {
       console.log("TX ID:", data.txId);
       console.log("Raw TX:", data.txRaw);
-      axios({
-        url: `${process.env.REACT_APP_BACKENDURL}/transactionRecords`,
-        method: "post",
-        headers: {
-          "a-auth-token": localStorage.getItem("auth"),
-          "Content-type": "application/json",
-        },
-        data: {
-          username,
-          stxValue,
-          txids: { delegateStx, delegateStxLock: data.txId },
-        },
-      });
     },
   };
 

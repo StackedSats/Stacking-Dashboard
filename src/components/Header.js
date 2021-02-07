@@ -40,6 +40,18 @@ function Header() {
     });
   };
 
+  const copy = () => {
+    navigator.clipboard.writeText(userAddress.testnet).then(
+      function () {
+        alert("Copied!");
+        console.log("Async: Copying to clipboard was successful!");
+      },
+      function (err) {
+        console.error("Async: Could not copy text: ", err);
+      }
+    );
+  };
+
   return (
     <header className="z-40 h-16 shadow-bottom bg-primary-500">
       <div className="flex items-center justify-between h-full px-6 mx-auto text-primary-300">
@@ -113,8 +125,8 @@ function Header() {
                 {user.username}
               </h2>
               <div className="flex items-center justify-center mt-4 mb-8">
-                <span className="mr-4">{userAddress}</span>
-                <FiCopy className="w-4 h-4" />
+                <span className="mr-4">{userAddress.testnet}</span>
+                <FiCopy className="w-4 h-4" onClick={copy} />
               </div>
               <button className="btn btn-primary">Become a STX Miner</button>
               <div className="mt-4">

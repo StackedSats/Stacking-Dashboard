@@ -106,7 +106,7 @@ function Blank() {
                     activeClassName="opacity-100 duration-500 translate-x-0"
                     inactiveClassName="absolute opacity-0 -translate-x-2"
                   >
-                    <TableContainer className="mb-8">
+                    <TableContainer className="mb-1">
                       <Table>
                         <TableHeader>
                           <tr>
@@ -118,65 +118,68 @@ function Blank() {
                           </tr>
                         </TableHeader>
                         <TableBody className="text-lg dark:divide-gray-500">
-                          {list
-                            .filter((value) => {
-                              return value.token_transfer === undefined
-                                ? false
-                                : true;
-                            })
-                            .map((value, index) => {
-                              return (
-                                <TableRow
-                                  key={index}
-                                  onClick={(e) => redirect(value.tx_id)}
-                                >
-                                  <TableCell>
-                                    <div className="text-lg text-white">
-                                      Today
-                                    </div>
-                                    <span className="text-sm">
-                                      {new Date(
-                                        value.burn_block_time_iso
-                                      ).toLocaleDateString()}{" "}
-                                      GMT
-                                    </span>
-                                  </TableCell>
-                                  <TableCell>
-                                    <span className="text-white">
-                                      {value.block_height}
-                                    </span>
-                                  </TableCell>
-                                  <TableCell>
-                                    {/* <div className="text-error-500">Karim</div> */}
-                                    <span>{value.sender_address}</span>
-                                  </TableCell>
-                                  <TableCell>
-                                    {/* <div className="text-primary-500">Karim</div> */}
-                                    <span>
-                                      {value.token_transfer.recipient_address}
-                                    </span>
-                                  </TableCell>
-                                  <TableCell>
-                                    <div className="float-right text-white">
-                                      {value.token_transfer.amount} STX
-                                    </div>
-                                    <div className="float-right text-sm">
-                                      <span className="text-warning-500">
-                                        {(value.token_transfer.amount *
-                                          prices.stxusd) /
-                                          prices.btcusd}
-                                      </span>{" "}
-                                      BTC |{" "}
-                                      <span className="text-success-600">
-                                        {value.token_transfer.amount *
-                                          prices.stxusd}
-                                      </span>{" "}
-                                      USD
-                                    </div>
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            })}
+                          {list.map((value, index) => {
+                            return (
+                              <TableRow
+                                key={index}
+                                onClick={(e) => redirect(value.tx_id)}
+                              >
+                                <TableCell>
+                                  <div className="text-lg text-white">
+                                    Today
+                                  </div>
+                                  <span className="text-sm">
+                                    {new Date(
+                                      value.burn_block_time_iso
+                                    ).toLocaleDateString()}{" "}
+                                    GMT
+                                  </span>
+                                </TableCell>
+                                <TableCell>
+                                  <span className="text-white">
+                                    {value.block_height}
+                                  </span>
+                                </TableCell>
+                                <TableCell>
+                                  {/* <div className="text-error-500">Karim</div> */}
+                                  <span>{value.sender_address}</span>
+                                </TableCell>
+                                <TableCell>
+                                  {/* <div className="text-primary-500">Karim</div> */}
+                                  <span>
+                                    {value.token_transfer
+                                      ? value.token_transfer.recipient_address
+                                      : null}
+                                  </span>
+                                </TableCell>
+                                <TableCell>
+                                  <div className="float-right text-white">
+                                    {value.token_transfer
+                                      ? value.token_transfer.amount
+                                      : 0}{" "}
+                                    STX
+                                  </div>
+                                  <div className="float-right text-sm">
+                                    <span className="text-warning-500">
+                                      {value.token_transfer
+                                        ? (value.token_transfer.amount *
+                                            prices.stxusd) /
+                                          prices.btcusd
+                                        : 0}
+                                    </span>{" "}
+                                    BTC |{" "}
+                                    <span className="text-success-600">
+                                      {value.token_transfer
+                                        ? value.token_transfer.amount *
+                                          prices.stxusd
+                                        : 0}
+                                    </span>{" "}
+                                    USD
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
                         </TableBody>
                       </Table>
                     </TableContainer>
