@@ -23,6 +23,7 @@ async function delegateSTX({
   delegateToo,
   burnHt,
   delegateStx,
+  setTxLoader,
   username,
 }) {
   const { hashMode, data } = decodeBtcAddress(poxAddr);
@@ -53,41 +54,31 @@ async function delegateSTX({
     finished: async (data) => {
       console.log("TX ID:", data.txId);
       console.log("Raw TX:", data.txRaw);
+      setTxLoader(true);
 
-      const check = setInterval(async () => {
-        const status = await axios.get(
-          `https://stacks-node-api.testnet.stacks.co/extended/v1/tx/${data.txId}`
+      try {
+        console.log(localStorage.getItem("auth"));
+        axios({
+          url: `${process.env.REACT_APP_BACKENDURL}/transactionRecords`,
+          method: "post",
+          headers: {
+            "x-auth-token": localStorage.getItem("auth"),
+            "Content-type": "application/json",
+          },
+          data: {
+            username,
+            stacker: getPerson()._profile.stxAddress,
+            amountSTX,
+            txId: data.tx,
+          },
+        });
+        setTxLoader(false);
+        alert(
+          `Delegation Lockup Relationship Setup. Thank You!!. Tx id is: ${data.txId}`
         );
-        if (status.data.tx_status === "success") {
-          try {
-            const hash = await axios({
-              url: `${process.env.REACT_APP_BACKENDURL}/transactionRecords`,
-              method: "post",
-              headers: {
-                "a-auth-token": localStorage.getItem("auth"),
-                "Content-type": "application/json",
-              },
-              data: {
-                username,
-                stacker: getPerson()._profile.stxAddress,
-                amountSTX,
-              },
-            });
-            alert(`${hash} : Delegation Lock confirmed. Thank You!!`);
-            stop();
-            return hash;
-          } catch (e) {
-            alert("Failed");
-            stop();
-          }
-        } else if (status.data.tx_status === "pending") {
-        } else {
-          alert(`Please try again or reach nako@stackedstats.com`);
-        }
-      }, 5000);
-
-      function stop() {
-        clearInterval(check);
+      } catch (e) {
+        setTxLoader(false);
+        alert("Failed");
       }
     },
   };

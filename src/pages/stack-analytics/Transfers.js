@@ -5,7 +5,6 @@ import PageTitle from "../../components/Typography/PageTitle";
 import {
   Card,
   CardBody,
-  Select,
   Table,
   TableHeader,
   TableCell,
@@ -24,6 +23,7 @@ import ThemedSuspense from "../../components/ThemedSuspense";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { UPDATETX } from "../../redux/reducers";
+import fileDownload from "js-file-download";
 
 const Left = () => {
   return (
@@ -57,6 +57,12 @@ function Blank() {
     history.push("/app/stack-analytics/transaction");
   };
 
+  const exportCSV = () => {
+    const downloadelist = list.map((value) => {
+      return JSON.stringify(value);
+    });
+    fileDownload(downloadelist, "report.csv");
+  };
   if (list.length === 0) {
     return <ThemedSuspense />;
   }
@@ -80,25 +86,14 @@ function Blank() {
                         >
                           Transfers
                         </TabGroup.Tab>
-                        {/* <TabGroup.Tab
-                          index={1}
-                          className="px-1 py-2 mr-3 text-xl transition-colors duration-150"
-                          activeClassName="text-primary-500 dark:text-white"
-                          inactiveClassName="text-gray-400 dark:text-gray-300"
-                        >
-                          Largest Transfers
-                        </TabGroup.Tab> */}
                       </TabGroup.TabList>
                       <div className="flex items-center ml-10 text-primary-400">
                         <FiDownload />
-                        <span className="ml-1">Export</span>
+                        <button onClick={exportCSV} className="ml-1">
+                          Export
+                        </button>
                       </div>
                     </div>
-                    {/* <div>
-                      <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
-                        <option>Sort By</option>
-                      </Select>
-                    </div> */}
                   </div>
                   <TabGroup.TabPanel
                     index={0}
@@ -184,54 +179,10 @@ function Blank() {
                       </Table>
                     </TableContainer>
                   </TabGroup.TabPanel>
-                  {/* <TabGroup.TabPanel
-                    index={1}
-                    className="flex flex-col py-10 text-gray-500 transition-all transform dark:text-gray-200"
-                    activeClassName="opacity-100 duration-500 translate-x-0"
-                    inactiveClassName="absolute opacity-0 -translate-x-2"
-                  >
-                    Largest Transfers
-                  </TabGroup.TabPanel> */}
                 </TabGroup>
               </CardBody>
             </Card>
           </div>
-          {/* <div className="space-y-6">
-            <Card>
-              <CardBody className="-mb-8 space-y-8 text-white">
-                <div className="flex flex-wrap justify-between">
-                  <div className="flex flex-wrap items-center">
-                    <h2 className="mr-3 text-xl font-medium">Total balance</h2>
-                  </div>
-                  <div>
-                    <Select className="py-1 pl-2 mt-1 leading-1 dark:bg-transparent dark:border-gray-300">
-                      <option>24 Hrs</option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="pb-3 mb-3 border-b border-gray-500">
-                  <div className="flex flex-wrap justify-between">
-                    <div>Total Transfer</div>
-                    <div className="flex font-medium">45459.59 STX</div>
-                  </div>
-                  <div className="flex flex-wrap justify-between text-sm text-gray-300">
-                    <div className="flex">Transfered with 1k txn</div>
-                    <span>
-                      <span className="text-yellow-500">3.25</span> BTC |{" "}
-                      <span className="text-green-600">245,635</span> USD
-                    </span>
-                  </div>
-                </div>
-                <img className="align-middle" src={ts} alt="" />
-              </CardBody>
-            </Card>
-            <Card>
-              <CardBody className="-mb-8 space-y-8 text-white">
-                <h2 className="mr-3 text-xl font-medium">Transaction fees</h2>
-                <img className="align-middle" src={tf} alt="" />
-              </CardBody>
-            </Card>
-          </div> */}
         </div>
       </div>
     </>

@@ -4,8 +4,6 @@ import PageTitle from "../../components/Typography/PageTitle";
 import { Card, CardBody, Select } from "@windmill/react-ui";
 import { FiDownload, FiCopy } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import ts from "../../assets/img/graph-transfer-summary.png";
-import tf from "../../assets/img/graph-transaction-fees.png";
 import axios from "axios";
 import { Right } from "../../components/right";
 import Error from "../404";

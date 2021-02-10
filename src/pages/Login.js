@@ -43,7 +43,7 @@ function Login() {
         data: { username, password },
         method: "post",
       });
-
+      console.log(loggingIn.data);
       if (loggingIn.status === 200) {
         localStorage.setItem("auth", loggingIn.data.token);
         dispatch({ type: userDetails, payload: loggingIn.data.user });

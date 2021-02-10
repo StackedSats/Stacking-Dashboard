@@ -6,7 +6,12 @@ import NetworkCard from "../../components/Cards/NetworkCard";
 
 import { MainNet, TestNet } from "../../icons";
 
-import { userSession, getUserData, authenticate } from "../../scripts/auth";
+import {
+  userSession,
+  getUserData,
+  authenticate,
+  // authenticMainnet,
+} from "../../scripts/auth";
 
 const Left = () => {
   return (
@@ -33,7 +38,7 @@ function Blank() {
               <TestNet className="mr-4" />
             </NetworkCard>
           </div>
-          {/* <div>
+          {/* <div onClick={() => authenticMainnet(history)}>
             <NetworkCard title="Total clients">
               <MainNet className="mr-4" />
             </NetworkCard>

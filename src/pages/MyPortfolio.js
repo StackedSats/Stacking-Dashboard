@@ -4,7 +4,6 @@ import PageTitle from "../components/Typography/PageTitle";
 import {
   Card,
   CardBody,
-  Select,
   Table,
   TableHeader,
   TableCell,
@@ -13,91 +12,22 @@ import {
   TableContainer,
   Input,
 } from "@windmill/react-ui";
-import {
-  FiTrash2,
-  FiCopy,
-  FiSettings,
-  FiInfo,
-  FiDownload,
-  FiArrowRight,
-} from "react-icons/fi";
+import { FiInfo, FiDownload, FiArrowRight } from "react-icons/fi";
 
+import { MenuIcon, MenuItems, Left } from "../components/Portfolio/";
+import FileDownload from "js-file-download";
 import ChartCard from "../components/Chart/ChartCard";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
-import ChartLegend from "../components/Chart/ChartLegend";
-
-import { userDetails } from "../redux/reducers";
 import Modal from "../components/address-modal";
 import ContextNav from "../components/ContextNav";
-import { DummyGraph2, Explorer } from "../icons";
-import { userSession, getPerson, getUserData } from "../scripts/auth";
-import { useDispatch, useSelector } from "react-redux";
+import { getPerson } from "../scripts/auth";
+import { useSelector } from "react-redux";
 import delegateSTX from "../delegation/1.delegatestx";
 import "../assets/css/tippy.css";
 import { Right } from "../components/right";
-import delegationLock from "../delegation/2.delegationLock";
 import getStackerInfor from "../delegation/getStackerInfo";
 
-import { Tooltip } from "react-tippy";
 const micro = 1000000;
-
-const MenuIcon = () => {
-  return (
-    <>
-      <FiSettings
-        aria-label="Context"
-        aria-haspopup="true"
-        className="mr-2 text-white wh-4"
-      />
-    </>
-  );
-};
-
-const MenuItems = ({ stx, btc, username }) => {
-  const dispatch = useDispatch();
-
-  const deleteAddress = async () => {
-    console.log(username, stx, btc);
-    const makeTheCal = await axios({
-      method: "delete",
-      url: `${process.env.REACT_APP_BACKENDURL}/addresses`,
-      data: {
-        username: username,
-        stxAddress: stx,
-        btcAddress: btc,
-      },
-    });
-    console.log(makeTheCal);
-    dispatch({ payload: makeTheCal.data, type: userDetails });
-  };
-
-  return (
-    <>
-      <li
-        className="flex items-center text-sm leading-8 text-gray-200 cursor-pointer hover:text-white"
-        onClick={deleteAddress}
-      >
-        <FiTrash2 className="mr-2 wh-3" />
-        <span>Delete</span>
-      </li>
-      <li className="flex items-center text-sm leading-8 text-gray-200 cursor-pointer hover:text-white">
-        <FiCopy className="mr-2 wh-3" />
-        <span>Copy Address</span>
-      </li>
-    </>
-  );
-};
-
-export const lineLegends = [{ title: "Organic", color: "bg-teal-600" }];
-
-const Left = () => {
-  return (
-    <>
-      <h1 className="mb-3 text-2xl">My Portfolio</h1>
-      <div>{new Date().toLocaleDateString()}</div>
-    </>
-  );
-};
 
 function MyPortfolio() {
   const prices = useSelector((state) => state.prices);
@@ -123,6 +53,7 @@ function MyPortfolio() {
   const [dailyReward, setDailyReward] = useState(0);
   const [dateForGraph, setDateForGraph] = useState([]);
   const [rewardForGraph, setRewardForGraph] = useState([]);
+  const [txLoader, setTxLoader] = useState(false);
 
   //Address Modal
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
@@ -150,9 +81,7 @@ function MyPortfolio() {
   }
 
   const [stx, setSTX] = useState(0);
-  const wallet = getPerson();
 
-  console.log(dateForGraph, rewardForGraph);
   const lineOptions = {
     data: {
       labels: dateForGraph,
@@ -199,7 +128,7 @@ function MyPortfolio() {
 
   useEffect(() => {
     const data = getPerson();
-    console.log(data);
+
     const fetchData = async () => {
       const address = data._profile.stxAddress.testnet;
       const result = await axios.get(
@@ -213,15 +142,12 @@ function MyPortfolio() {
         data: state,
       });
 
-      console.log(values.data.txs);
       if (values.data.txs) setTxs(values.data.txs);
 
       const graph = await axios.post(
         `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
         { username: state.username }
       );
-
-      console.log(graph.data);
 
       setDateForGraph(
         graph.data.date.map((value) => {
@@ -250,7 +176,7 @@ function MyPortfolio() {
           const result = await axios.get(
             `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${i}/balances`
           );
-          console.log(result);
+
           vs.push(result.data.stx.balance);
         } catch (e) {
           vs.push(0);
@@ -309,9 +235,21 @@ function MyPortfolio() {
       amountSTX: stx * micro,
       delegateToo: "ST3K2B2FH1AYXD26WV6YZY4DAA82AZNK967BNB9BK",
       burnHt: 3,
+      setTxLoader,
     });
+  };
 
-    console.log(delegateStx);
+  const btcRewardHistoryCSV = async () => {
+    await axios({
+      url: `${process.env.REACT_APP_BACKENDURL}/generateCSV/${state.username}`,
+      method: "get",
+      headers: {
+        "x-auth-token": localStorage.getItem("auth"),
+        "Content-Type": "text/csv",
+      },
+    }).then((response) => {
+      FileDownload(response.data, "report.csv");
+    });
   };
 
   console.log(lineOptions);
@@ -332,12 +270,12 @@ function MyPortfolio() {
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-400">
                       <span>Total BTC Reward</span>
                       <span className="text-lg text-warning-500">
-                        {state.totalBTCReward}
+                        {state.totalBTCReward || 0}
                       </span>
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-400">
                       <span>Daily BTC Reward</span>
-                      <span className="">{dailyReward}</span>
+                      <span className="">{dailyReward || 0}</span>
                     </div>
                     <div className="flex flex-wrap items-center justify-between py-2 text-gray-300 border-b border-gray-400">
                       <span>Pending BTC Reward</span>
@@ -374,17 +312,14 @@ function MyPortfolio() {
                         BTC Reward History
                       </h3>
                     </span>
-                    <div className="flex items-center ml-10 text-primary-400">
+                    <div
+                      className="flex items-center ml-10 text-primary-400"
+                      onClick={btcRewardHistoryCSV}
+                    >
                       <FiDownload />
-                      <span className="ml-1">Export</span>
+                      <button className="ml-1">Export</button>
                     </div>
                   </div>
-                  {/* <div className="flex space-x-2">
-                    <button className="btn btn-primary btn-xs">Received</button>
-                    <button className="text-white btn btn-outline-gray btn-xs">
-                      Pending
-                    </button>
-                  </div> */}
                 </div>
                 <TableContainer className="mb-8">
                   <Table>
@@ -669,9 +604,7 @@ function MyPortfolio() {
                   </div>
                 </div> */}
                 {/* <ChartCard title="Lines">
-                  <Line {...lineOptions} />
-                  <ChartLegend legends={lineLegends} />
-                </ChartCard> */}
+                  <Line {...lineOptions} />                </ChartCard> */}
               </div>
               <button
                 className="mt-4 mb-6 btn btn-outline-primary btn-sm btn-block"
@@ -679,6 +612,7 @@ function MyPortfolio() {
               >
                 Stack now
               </button>
+              {txLoader ? <div>Wait....</div> : <></>}
             </CardBody>
           </Card>
           <Card>
@@ -739,22 +673,6 @@ function MyPortfolio() {
                   </div>
                 </div>
               </div>
-              {/* <div>
-                <div className="flex justify-end mb-4">
-                  <div>
-                    <Select className="py-1 pl-2 mt-1 bg-transparent border-gray-300 leading-1">
-                      <option>Staked</option>
-                    </Select>
-                  </div>
-                </div>
-                {/* <ChartCard title="Lines">
-                  <Line {...lineOptions} />
-                  <ChartLegend legends={lineLegends} />
-                </ChartCard> 
-              </div>*/}
-              {/* <button className="mt-4 mb-6 btn btn-outline-gray btn-sm btn-block">
-                Stack now
-              </button>{" "} */}
             </CardBody>
           </Card>
         </div>

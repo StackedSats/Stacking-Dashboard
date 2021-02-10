@@ -4,6 +4,7 @@ export const STXTotalVolume = "STXTotalVolume";
 export const userDetails = "userDetails";
 export const PRICES = "prices";
 export const UPDATETX = "updatetx";
+export const CHANGENETWORK = "changeNetwork";
 
 export const updateVolume = (
   state = { STXTotalVolume: "Please Sign In" },
@@ -55,4 +56,19 @@ export const txid = (state = "", action) => {
   }
 };
 
-export const reducer = combineReducers({ updateVolume, user, prices, txid });
+export const network = (state = "mainnet", action) => {
+  switch (action.type) {
+    case CHANGENETWORK:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+export const reducer = combineReducers({
+  updateVolume,
+  user,
+  prices,
+  txid,
+  network,
+});
