@@ -34,7 +34,7 @@ function Blank() {
       <div className="p-4 space-y-6">
         <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
           <div onClick={() => authenticate(history)}>
-            <NetworkCard title="Total clients">
+            <NetworkCard title="Connect Wallet">
               <TestNet className="mr-4" />
             </NetworkCard>
           </div>

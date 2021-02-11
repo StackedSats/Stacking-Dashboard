@@ -13,23 +13,37 @@ import {
   Input,
 } from "@windmill/react-ui";
 import { FiInfo, FiDownload, FiArrowRight } from "react-icons/fi";
-
 import { MenuIcon, MenuItems, Left } from "../components/Portfolio/";
 import FileDownload from "js-file-download";
 import ChartCard from "../components/Chart/ChartCard";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
 import Modal from "../components/address-modal";
 import ContextNav from "../components/ContextNav";
-import { getPerson } from "../scripts/auth";
+import { getPerson, userSession } from "../scripts/auth";
 import { useSelector } from "react-redux";
 import delegateSTX from "../delegation/1.delegatestx";
 import "../assets/css/tippy.css";
 import { Right } from "../components/right";
 import getStackerInfor from "../delegation/getStackerInfo";
+import { useHistory } from "react-router-dom";
 
 const micro = 1000000;
 
 function MyPortfolio() {
+  const history = useHistory();
+
+  if (userSession.isSignInPending()) {
+    userSession.handlePendingSignIn().then((userData) => {
+      history.push("/app/network");
+    });
+  }
+  let data;
+  try {
+    data = getPerson();
+  } catch (e) {
+    history.push("/app/network");
+  }
+
   const prices = useSelector((state) => state.prices);
   const state = useSelector((state) => state.user);
   const [txs, setTxs] = useState([]);
@@ -127,67 +141,68 @@ function MyPortfolio() {
   };
 
   useEffect(() => {
-    const data = getPerson();
-
     const fetchData = async () => {
-      const address = data._profile.stxAddress.testnet;
-      const result = await axios.get(
-        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${address}/balances`
-      );
-      setPortfolio(result.data.stx);
+      if (data) {
+        const address = data._profile.stxAddress.testnet;
+        const result = await axios.get(
+          `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${address}/balances`
+        );
+        setPortfolio(result.data.stx);
 
-      const values = await axios({
-        url: `${process.env.REACT_APP_BACKENDURL}/btcAddressReward`,
-        method: "post",
-        data: state,
-      });
+        const values = await axios({
+          url: `${process.env.REACT_APP_BACKENDURL}/btcAddressReward`,
+          method: "post",
+          data: state,
+        });
 
-      if (values.data.txs) setTxs(values.data.txs);
+        if (values.data.txs) setTxs(values.data.txs);
 
-      const graph = await axios.post(
-        `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
-        { username: state.username }
-      );
+        const graph = await axios.post(
+          `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
+          { username: state.username }
+        );
 
-      setDateForGraph(
-        graph.data.date.map((value) => {
-          console.log(value);
-          var date = new Date(value);
-          return date.toLocaleDateString();
-        })
-      );
-      setRewardForGraph(graph.data.reward);
+        setDateForGraph(
+          graph.data.date.map((value) => {
+            console.log(value);
+            var date = new Date(value);
+            return date.toLocaleDateString();
+          })
+        );
+        setRewardForGraph(graph.data.reward);
 
-      const claimReward = await axios.post(
-        `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
-        { username: state.username }
-      );
+        const claimReward = await axios.post(
+          `${process.env.REACT_APP_BACKENDURL}/getUserClaimedRewardsGraph`,
+          { username: state.username }
+        );
 
-      if (claimReward.status === 405) {
-        setDailyReward(0);
-      } else {
-        setDailyReward(claimReward.data.value);
-      }
-
-      const vs = [];
-
-      for (let i of state.stxAddress) {
-        try {
-          const result = await axios.get(
-            `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${i}/balances`
-          );
-
-          vs.push(result.data.stx.balance);
-        } catch (e) {
-          vs.push(0);
+        if (claimReward.status === 405) {
+          setDailyReward(0);
+        } else {
+          setDailyReward(claimReward.data.value);
         }
-      }
 
-      setaddressValue(vs);
+        const vs = [];
+
+        for (let i of state.stxAddress) {
+          try {
+            const result = await axios.get(
+              `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${i}/balances`
+            );
+
+            vs.push(result.data.stx.balance);
+          } catch (e) {
+            vs.push(0);
+          }
+        }
+
+        setaddressValue(vs);
+      }
     };
     fetchData();
-    getStackerInfor();
-  }, [state, state.username]);
+    // getStackerInfor();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history, state, state.username]);
 
   const addAddress = async () => {
     const makeTheCal = await axios({
