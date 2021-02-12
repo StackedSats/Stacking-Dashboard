@@ -29,7 +29,7 @@ const Left = () => {
   return (
     <>
       <h1 className="mb-3 text-2xl">Transfer Activity</h1>
-      <div>Dec 20, 2020 01:38</div>
+      <div>{new Date().toLocaleDateString()}</div>
     </>
   );
 };
