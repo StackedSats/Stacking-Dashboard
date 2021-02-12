@@ -42,10 +42,10 @@ const routes = [
       },
     ],
   },
-  {
-    name: "Freeholders",
-    path: "/app/blank",
-  },
+  // {
+  //   name: "Freeholders",
+  //   path: "/app/blank",
+  // },
   {
     name: "Network",
     path: "/app/network",

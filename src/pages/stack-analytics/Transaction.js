@@ -70,7 +70,9 @@ function Blank() {
   useEffect(() => {
     if (tx_id) {
       axios
-        .get(`https://stacks-node-api.blockstack.org/extended/v1/tx/${tx_id}`)
+        .get(
+          `https://stacks-node-api.mainnet.stacks.co/extended/v1/tx/${tx_id}`
+        )
         .then((res) => {
           setValues(res.data);
         });
@@ -151,7 +153,7 @@ function Blank() {
                       <div className="flex flex-wrap items-center justify-between py-2 border-b border-gray-600">
                         <span>Amount</span>
                         <span className="text-success-500">
-                          {values.token_transfer.amount}
+                          {values.token_transfer.amount / 1000000}
                         </span>
                       </div>
                     </div>

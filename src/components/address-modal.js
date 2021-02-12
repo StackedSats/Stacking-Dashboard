@@ -31,10 +31,10 @@ function Modals({
     <>
       <div className="my-6 space-y-6">
         <div>
-          <Button onClick={openAddressModal}>Address Modal</Button>
+          <Button onClick={openAddressModal}>Add BTC Address</Button>
         </div>
         <div>
-          <Button onClick={openManualAddressModal}>Manual Address Modal</Button>
+          <Button onClick={openManualAddressModal}>Add STX Addess</Button>
         </div>
 
         <Modal isOpen={isAddressModalOpen} onClose={closeAddressModal}>
@@ -102,21 +102,10 @@ function Modals({
                         <MainNet width="32" />
                         <span className="ml-4">{value}</span>
                       </div>
-                      <div className="flex items-center justify-between space-x-2 text-primary-500">
-                        <button>
-                          <FiCopy size={20} />
-                        </button>
-                        <button>
-                          <FiTrash2 size={20} />
-                        </button>
-                      </div>
                     </li>
                   );
                 })}
               </ul>
-              <button className="text-xl font-medium text-success-500 btn-icon text-md">
-                Go to Dashboard <VscArrowSmallRight />
-              </button>
             </div>
           </ModalBody>
         </Modal>

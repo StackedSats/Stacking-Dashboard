@@ -128,7 +128,6 @@ function Header() {
                 <span className="mr-4">{userAddress.testnet}</span>
                 <FiCopy className="w-4 h-4" onClick={copy} />
               </div>
-              <button className="btn btn-primary">Become a STX Miner</button>
               <div className="mt-4">
                 <button className="text-red-600 btn-icon" onClick={logout}>
                   Log Out <VscArrowSmallRight />

@@ -24,6 +24,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { UPDATETX } from "../../redux/reducers";
 import fileDownload from "js-file-download";
+import { getPerson, userSession } from "../../scripts/auth";
 
 const Left = () => {
   return (
@@ -40,15 +41,34 @@ function Blank() {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  if (userSession.isSignInPending()) {
+    userSession.handlePendingSignIn().then((userData) => {
+      history.push("/app/network");
+    });
+  }
+  let data;
+  try {
+    data = getPerson();
+  } catch (e) {
+    history.push("/app/network");
+  }
+
   useEffect(() => {
     const fetch = async () => {
-      const data = await axios.get(
-        `https://stacks-node-api.testnet.stacks.co/extended/v1/address/ST000000000000000000002AMW42H/transactions`
-      );
-      console.log(data.data);
-      setList(data.data.results);
+      if (data) {
+        const data2 = await axios.get(
+          `https://stacks-node-api.testnet.stacks.co/extended/v1/address/${data._profile.stxAddress.testnet}/transactions`
+        );
+        console.log(data2.data);
+        setList(
+          data2.data.results.filter((data) => {
+            return data.token_transfer ? true : false;
+          })
+        );
+      }
     };
     fetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const redirect = (tx) => {

@@ -45,7 +45,7 @@ function SidebarContent() {
           )
         )}
       </ul>
-      <div className="px-6 my-6">
+      {/* <div className="px-6 my-6">
         <a href="/" className="text-sm btn btn-primary btn-block btn-icon">
           Become a STX Miner
           <span
@@ -53,7 +53,7 @@ function SidebarContent() {
             dangerouslySetInnerHTML={{ __html: "&RightArrow;" }}
           ></span>
         </a>
-      </div>
+      </div> */}
       <div className="px-6 my-6">
         <h4 className="mb-2">Next Reward Cycle</h4>
         <CountdownTimer stakingDuration="24" endDate="01/08/2021 11:13:01" />

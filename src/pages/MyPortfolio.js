@@ -23,6 +23,8 @@ import { getPerson, userSession } from "../scripts/auth";
 import { useSelector } from "react-redux";
 import delegateSTX from "../delegation/1.delegatestx";
 import "../assets/css/tippy.css";
+import { useDispatch } from "react-redux";
+import { userDetails } from "../redux/reducers";
 import { Right } from "../components/right";
 import getStackerInfor from "../delegation/getStackerInfo";
 import { useHistory } from "react-router-dom";
@@ -68,7 +70,7 @@ function MyPortfolio() {
   const [dateForGraph, setDateForGraph] = useState([]);
   const [rewardForGraph, setRewardForGraph] = useState([]);
   const [txLoader, setTxLoader] = useState(false);
-
+  const dispatch = useDispatch();
   //Address Modal
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
@@ -215,6 +217,8 @@ function MyPortfolio() {
       },
     });
     console.log(makeTheCal);
+
+    dispatch({ type: userDetails, payload: makeTheCal.data });
   };
 
   const claim = async () => {
@@ -267,10 +271,9 @@ function MyPortfolio() {
     });
   };
 
-  console.log(lineOptions);
   return (
     <>
-      <PageTitle left={<Left />} right={<Right />}></PageTitle>
+      <PageTitle left={<Left />}></PageTitle>
       <div className="p-4 space-y-6">
         <Card>
           <CardBody className="text-white">
@@ -683,7 +686,7 @@ function MyPortfolio() {
                       {parseFloat(
                         stx / (prices.stxusd * prices.btcusd)
                       ).toFixed(2)}{" "}
-                      BTV
+                      BTC
                     </span>
                   </div>
                 </div>
