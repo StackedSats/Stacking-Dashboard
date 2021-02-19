@@ -69,7 +69,7 @@ async function delegateSTX({
             username,
             stacker: getPerson()._profile.stxAddress,
             amountSTX,
-            txId: data.tx,
+            txId: data.txId,
           },
         });
         setTxLoader(false);
