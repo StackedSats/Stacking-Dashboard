@@ -1,6 +1,6 @@
 # Staking-Dashboard
 
-### Prerequistics
+### Prerequisites
 
 - Volta installed <a href="https://docs.volta.sh/guide/">Link</a>
 
@@ -53,11 +53,11 @@ OR
 
 - The termination of the delegation relationship can either happen automatically based on set expiration rules or by actively revoking delegation rights
 
-### LICENCE
+### LICENSE
 
 This project is GNU Public licenced.
 
-### Architectre overview
+### Architecture overview
 
 - Framework: Create-React-App
 - Libraries ( some of them )
