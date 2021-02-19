@@ -1,4 +1,4 @@
-# Staking-Dashboard
+# Stacking-Dashboard
 
 ### Prerequisites
 
